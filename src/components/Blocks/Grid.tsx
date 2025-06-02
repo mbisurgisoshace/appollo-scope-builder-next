@@ -116,7 +116,6 @@ export default function Grid({ canvasBlock }: GridProps) {
           // width: canvasBlock.width,
           // height: canvasBlock.height,
         }}
-        onResize={(e) => console.log("e", e)}
         className={`bg-white rounded-xl shadow-2xl relative`}
       >
         {canvasBlock.data.map((row, rowIndex) => {
