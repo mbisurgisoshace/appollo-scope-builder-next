@@ -30,7 +30,7 @@ export default function Interview({ canvasBlock }: InterviewProps) {
       const editorState = EditorState.createWithContent(contentState);
       setEditorState(editorState);
     }
-  }, [canvasBlock.parsedContent]);
+  }, []);
 
   // const { setNodeRef } = useDroppable({
   //   id: canvasBlock.id,
