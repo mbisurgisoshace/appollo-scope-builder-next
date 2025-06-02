@@ -138,7 +138,6 @@ export default function Table({ canvasBlock }: TableProps) {
           // width: canvasBlock.width,
           // height: canvasBlock.height,
         }}
-        onResize={(e) => console.log("e", e)}
         className={`bg-white rounded-xl shadow-2xl relative`}
       >
         <table className="w-full border">
