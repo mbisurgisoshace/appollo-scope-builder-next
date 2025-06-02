@@ -38,7 +38,7 @@ class RenderLoop {
 
 let renderLoop: RenderLoop;
 export function getRenderLoop(fps = 15, draw: () => void) {
-  //@ts-ignore
+  //@ts-expect-error Avoid eslint error
   if (!renderLoop) return new RenderLoop(fps, draw);
   else return renderLoop;
 }

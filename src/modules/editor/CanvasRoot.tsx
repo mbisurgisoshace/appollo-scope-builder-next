@@ -12,7 +12,7 @@ const CanvasRoot = () => {
   const unselectElement = useCanvasStore((state) => state.unselectElement);
 
   const canvas = useRef<HTMLDivElement>(null);
-  //@ts-ignore
+  //@ts-expect-error Avoid eslint error
   const [width, height] = useSize(canvas);
   useEffect(() => {
     if (width === 0 || height === 0) return;

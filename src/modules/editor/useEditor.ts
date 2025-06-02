@@ -23,8 +23,7 @@ export default function useEditor() {
   const [isTableOpen, setIsTableOpen] = useState(false);
   const [isUploadImageOpen, setIsUploadImageOpen] = useState(false);
 
-  //@ts-ignore
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: any) => {
     setActive(null);
 
     const { id } = event.active;
@@ -34,7 +33,7 @@ export default function useEditor() {
 
     // const toolItems = items.get(tool) || [];
     // const item = toolItems.find((item) => item.id === id);
-    //@ts-ignore
+
     const item = items?.find((item) => item.id === id);
 
     if (id === "ui-grid") {
@@ -53,7 +52,7 @@ export default function useEditor() {
     }
 
     if (id.includes("ui")) {
-      const newItem = createBlock(id, "");
+      const newItem = createBlock(id);
       addBlock(newItem);
     }
 

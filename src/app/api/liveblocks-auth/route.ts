@@ -1,4 +1,3 @@
-import { useSession } from "@clerk/nextjs";
 import { Liveblocks } from "@liveblocks/node";
 import { auth, currentUser } from "@clerk/nextjs/server";
 

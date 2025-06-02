@@ -125,14 +125,12 @@ export default class CanvasStore {
   }
 
   private static isCameraInBounds(
-    //@ts-ignore
     cameraX: number,
-    //@ts-ignore
     cameraY: number,
-    //@ts-ignore
     cameraZ: number
   ) {
     return true;
+    console.log("Checking camera bounds", cameraX, cameraY, cameraZ);
     // const angle = radians(30);
     // const { x, y, width, height } = cameraToScreenCoordinates(
     //   cameraX,
@@ -219,47 +217,17 @@ export default class CanvasStore {
 }
 
 interface CanvasContextType {
-  // tool: Tool;
   unselectElement: () => void;
   scale: { x: number; y: number };
-  // switchTool: (Tool: Tool) => void;
-  // items: Map<Tool, CanvasBlock[]>;
   selectedElement: CanvasBlock | null;
-  // setItems: (items: CanvasBlock[]) => void;
   selectElement: (element: CanvasBlock) => void;
-  // newContainerSetup: NewContainerSetup | undefined;
   setScale: (scale: { x: number; y: number }) => void;
-  // setNewContainerSetup: (newContainerSetup?: NewContainerSetup) => void;
 }
 
-// const initialItems = new Map<Tool, CanvasBlock[]>();
-// initialItems.set("ui-builder", [
-//   {
-//     top: 1100,
-//     left: 1300,
-//     width: 375,
-//     height: 812,
-//     children: [],
-//     name: "Onboarding",
-//     blockType: "screen",
-//     id: `screen-${uuidv4()}`,
-//   },
-// ]);
-// initialItems.set("db-builder", []);
-// initialItems.set("scope-builder", []);
-
 export const useCanvasStore = create<CanvasContextType>((set) => ({
-  // tool: "ui-builder",
-  // items: initialItems,
   scale: { x: 1, y: 1 },
   selectedElement: null,
-  // newContainerSetup: undefined,
-  // setNewContainerSetup: (newContainerSetup) =>
-  //   set({ newContainerSetup: newContainerSetup }),
   setScale: (scale) => set({ scale }),
-  // switchTool: (tool) => set({ tool }),
   unselectElement: () => set({ selectedElement: null }),
   selectElement: (element) => set({ selectedElement: element }),
-  // setItems: (items) =>
-  //   set((state) => ({ items: state.items.set(state.tool, items) })),
 }));

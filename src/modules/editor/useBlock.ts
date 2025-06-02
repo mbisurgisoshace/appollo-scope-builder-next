@@ -1,23 +1,17 @@
 import { v4 as uuidv4 } from "uuid";
 
 import {
-  ColDefinition,
   GridBlock,
-  ImageBlock,
+  BlockType,
   TableBlock,
-  type BlockType,
-  type CanvasBlock,
-  type InterviewBlock,
-} from "../types";
+  ImageBlock,
+  CanvasBlock,
+  ColDefinition,
+  InterviewBlock,
+} from "@/types";
 
 export default function useBlock() {
-  const createBlock = (
-    blockType: BlockType,
-    //@ts-ignore
-    containerId: string,
-    //@ts-ignore
-    style?: React.CSSProperties
-  ): CanvasBlock => {
+  const createBlock = (blockType: BlockType): CanvasBlock => {
     if (blockType === "ui-interview") return createInterviewBlock();
 
     throw new Error("Invalid block type");

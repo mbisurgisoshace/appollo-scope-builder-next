@@ -1,27 +1,28 @@
+import Image from "next/image";
 import { useMutation } from "convex/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { ImageBlock } from "../../modules/types";
+import { ImageBlock as ImageBlockType } from "@/types";
 import { api } from "../../../convex/_generated/api";
 import { DraggableResizablePosition } from "../../modules/core/foundation";
 
 export interface ImageProps {
-  canvasBlock: ImageBlock;
+  canvasBlock: ImageBlockType;
 }
 
-export default function Image({ canvasBlock }: ImageProps) {
+export default function ImageBlock({ canvasBlock }: ImageProps) {
   const { storageId } = canvasBlock;
   const mutation = useMutation(api.upload.getImageUrl);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchImageUrl();
-  }, []);
-
-  const fetchImageUrl = async () => {
+  const fetchImageUrl = useCallback(async () => {
     const url = await mutation({ storageId });
     setImageUrl(url);
-  };
+  }, [mutation, storageId]);
+
+  useEffect(() => {
+    fetchImageUrl();
+  }, [fetchImageUrl]);
 
   return (
     <DraggableResizablePosition
@@ -33,13 +34,12 @@ export default function Image({ canvasBlock }: ImageProps) {
       height={canvasBlock.height}
     >
       {imageUrl ? (
-        <img
-          style={{
-            width: canvasBlock.width,
-            height: canvasBlock.height,
-          }}
-          className="object-cover"
+        <Image
           src={imageUrl}
+          alt="Image Block"
+          width={canvasBlock.width}
+          height={canvasBlock.height}
+          className="object-cover"
         />
       ) : null}
     </DraggableResizablePosition>

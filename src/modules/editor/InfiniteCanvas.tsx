@@ -17,7 +17,6 @@ const InfiniteCanvas = ({}: { frame: string }) => {
         transformOrigin: "top left",
       }}
     >
-      {/* @ts-ignore*/}
       {items?.map((item, index) => (
         <Block key={index} canvasBlock={item} />
       ))}

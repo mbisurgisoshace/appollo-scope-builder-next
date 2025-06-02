@@ -7,9 +7,9 @@ import { useEffect, useRef, useState } from "react";
 import { ContentState, EditorState, convertToRaw } from "draft-js";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-import { DraggablePosition } from "../../modules/core/foundation";
-import { CanvasBlock, type InterviewBlock } from "../../modules/types";
+import { CanvasBlock, InterviewBlock } from "@/types";
 import useEditor from "../../modules/editor/useEditor";
+import { DraggablePosition } from "../../modules/core/foundation";
 
 export interface InterviewProps {
   canvasBlock: InterviewBlock;
@@ -30,7 +30,7 @@ export default function Interview({ canvasBlock }: InterviewProps) {
       const editorState = EditorState.createWithContent(contentState);
       setEditorState(editorState);
     }
-  }, []);
+  }, [canvasBlock.parsedContent]);
 
   // const { setNodeRef } = useDroppable({
   //   id: canvasBlock.id,

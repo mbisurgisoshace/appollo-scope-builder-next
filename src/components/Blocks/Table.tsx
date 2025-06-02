@@ -11,8 +11,8 @@ import { LiveList } from "@liveblocks/client";
 import { useMutation } from "@liveblocks/react";
 import { useRef, useState, useEffect } from "react";
 
-import { CanvasBlock, TableBlock } from "../../modules/types";
 import { DraggablePosition } from "../../modules/core/foundation";
+import { CanvasBlock, TableBlock } from "@/types";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
