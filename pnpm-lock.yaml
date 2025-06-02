@@ -108,6 +108,9 @@ importers:
       '@types/draftjs-to-html':
         specifier: ^0.8.4
         version: 0.8.4
+      '@types/html-to-draftjs':
+        specifier: ^1.5.0
+        version: 1.5.0
       '@types/node':
         specifier: ^20
         version: 20.17.56
@@ -1131,6 +1134,9 @@ packages:
 
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
+
+  '@types/html-to-draftjs@1.5.0':
+    resolution: {integrity: sha512-6t0ZAkSR4n822+XD7PCtf7kPcG9GmqJzC3sm38xU0TbozbCCjculgp9wfMgyWR1q8VuEO+3rCf7iLFU7vslkPQ==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -3645,6 +3651,10 @@ snapshots:
       '@types/draft-js': 0.11.18
 
   '@types/estree@1.0.7': {}
+
+  '@types/html-to-draftjs@1.5.0':
+    dependencies:
+      '@types/draft-js': 0.11.18
 
   '@types/json-schema@7.0.15': {}
 
