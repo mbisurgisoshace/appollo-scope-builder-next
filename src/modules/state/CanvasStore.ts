@@ -1,0 +1,265 @@
+"use client";
+import { create } from "zustand";
+
+import {
+  scaleWithAnchorPoint,
+  cameraToScreenCoordinates,
+} from "../core/camera-utils";
+
+import { CanvasBlock } from "@/types";
+import { CAMERA_ANGLE, RECT_H, RECT_W } from "../core/constants";
+
+export interface CanvasState {
+  shouldRender: boolean;
+  pixelRatio: number; // our resolution for dip calculations
+  container: {
+    //holds information related to our screen container
+    width: number;
+    height: number;
+  };
+  pointer: {
+    x: number;
+    y: number;
+  };
+  camera: {
+    //holds camera state
+    x: number;
+    y: number;
+    z: number;
+  };
+  elements: CanvasBlock[];
+}
+const getInitialCanvasState = (): CanvasState => {
+  return {
+    shouldRender: true,
+    pixelRatio: window.devicePixelRatio || 1,
+    container: {
+      width: 0,
+      height: 0,
+    },
+    pointer: {
+      x: 0,
+      y: 0,
+    },
+    camera: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+    elements: [],
+  };
+};
+
+let canvasData = getInitialCanvasState();
+
+export default class CanvasStore {
+  private static get data() {
+    if (!canvasData)
+      canvasData = {
+        shouldRender: true,
+        pixelRatio: window.devicePixelRatio || 1,
+        container: {
+          width: 0,
+          height: 0,
+        },
+        pointer: {
+          x: 0,
+          y: 0,
+        },
+        camera: {
+          x: 0,
+          y: 0,
+          z: 0,
+        },
+        elements: [],
+      };
+    return canvasData;
+  }
+
+  static initialize(width: number, height: number, elements: CanvasBlock[]) {
+    const containerWidth = width;
+    const containerHeight = height;
+    canvasData = getInitialCanvasState();
+    canvasData.pixelRatio = window.devicePixelRatio || 1;
+    canvasData.container.width = containerWidth;
+    canvasData.container.height = containerHeight;
+    canvasData.camera.x = 1.5 * RECT_W;
+    canvasData.camera.y = 1.5 * RECT_H;
+    canvasData.camera.z = containerWidth / (2 * Math.tan(CAMERA_ANGLE));
+    canvasData.elements = elements;
+  }
+  public static get screen() {
+    const { x, y, z } = this.camera;
+    const aspect = this.aspect;
+    const angle = CAMERA_ANGLE;
+    return cameraToScreenCoordinates(x, y, z, angle, aspect);
+  }
+  public static get camera() {
+    return this.data.camera;
+  }
+  public static get elements() {
+    return this.data.elements;
+  }
+  public static get scale() {
+    const { width: w, height: h } = CanvasStore.screen;
+    const { width: cw, height: ch } = CanvasStore.container;
+    return { x: cw / w, y: ch / h };
+  }
+  public static get shouldRender() {
+    return canvasData.shouldRender;
+  }
+  public static set shouldRender(value: boolean) {
+    canvasData.shouldRender = value;
+  }
+
+  private static get container() {
+    return canvasData.container;
+  }
+
+  private static get pointer() {
+    return canvasData.pointer;
+  }
+
+  private static get aspect() {
+    return canvasData.container.width / canvasData.container.height;
+  }
+
+  private static isCameraInBounds(
+    //@ts-ignore
+    cameraX: number,
+    //@ts-ignore
+    cameraY: number,
+    //@ts-ignore
+    cameraZ: number
+  ) {
+    return true;
+    // const angle = radians(30);
+    // const { x, y, width, height } = cameraToScreenCoordinates(
+    //   cameraX,
+    //   cameraY,
+    //   cameraZ,
+    //   angle,
+    //   this.aspect
+    // );
+    // const isXInBounds = x >= 0 && x <= this.data.canvas.width;
+    // const isYInBounds = y >= 0 && y <= this.data.canvas.height;
+    // return isXInBounds && isYInBounds;
+  }
+
+  public static dragElement(id: any, deltaX: number, deltaY: number) {
+    const elements = this.data.elements;
+    const element = elements.find((item) => item.id === id);
+    if (!element) return;
+    element.left += deltaX / this.scale.x;
+    element.top += deltaY / this.scale.y;
+    this.shouldRender = true;
+  }
+
+  public static moveCamera(mx: number, my: number) {
+    const scrollFactor = 1.5;
+    const deltaX = mx * scrollFactor,
+      deltaY = my * scrollFactor;
+    const { x, y, z } = this.camera;
+    if (this.isCameraInBounds(x + deltaX, y + deltaY, z)) {
+      this.data.camera.x += deltaX;
+      this.data.camera.y += deltaY;
+      // move pointer by the same amount
+      this.shouldRender = true;
+      this.movePointer(deltaY, deltaY);
+    }
+  }
+
+  //@ts-ignore
+  public static zoomCamera(deltaX: number, deltaY: number) {
+    // Normal zoom is quite slow, we want to scale the amount quite a bit
+    const zoomScaleFactor = 10;
+    const deltaAmount = zoomScaleFactor * Math.max(deltaY);
+    const { x: oldX, y: oldY, z: oldZ } = this.camera;
+    const oldScale = { ...this.scale };
+
+    const { width: containerWidth, height: containerHeight } = this.container;
+    const { width, height } = cameraToScreenCoordinates(
+      oldX,
+      oldY,
+      oldZ + deltaAmount,
+      CAMERA_ANGLE,
+      this.aspect
+    );
+    const newScaleX = containerWidth / width;
+    const newScaleY = containerHeight / height;
+    const { x: newX, y: newY } = scaleWithAnchorPoint(
+      this.pointer.x,
+      this.pointer.y,
+      oldX,
+      oldY,
+      oldScale.x,
+      oldScale.y,
+      newScaleX,
+      newScaleY
+    );
+    const newZ = oldZ + deltaAmount;
+    this.shouldRender = true;
+    if (this.isCameraInBounds(oldX, oldY, newZ)) {
+      this.data.camera = {
+        x: newX,
+        y: newY,
+        z: newZ,
+      };
+    }
+  }
+
+  // pointer position from top left of the screen
+  public static movePointer(deltaX: number, deltaY: number) {
+    const scale = this.scale;
+    const { x: left, y: top } = this.screen;
+
+    this.data.pointer.x = left + deltaX / scale.x;
+    this.data.pointer.y = top + deltaY / scale.y;
+  }
+}
+
+interface CanvasContextType {
+  // tool: Tool;
+  unselectElement: () => void;
+  scale: { x: number; y: number };
+  // switchTool: (Tool: Tool) => void;
+  // items: Map<Tool, CanvasBlock[]>;
+  selectedElement: CanvasBlock | null;
+  // setItems: (items: CanvasBlock[]) => void;
+  selectElement: (element: CanvasBlock) => void;
+  // newContainerSetup: NewContainerSetup | undefined;
+  setScale: (scale: { x: number; y: number }) => void;
+  // setNewContainerSetup: (newContainerSetup?: NewContainerSetup) => void;
+}
+
+// const initialItems = new Map<Tool, CanvasBlock[]>();
+// initialItems.set("ui-builder", [
+//   {
+//     top: 1100,
+//     left: 1300,
+//     width: 375,
+//     height: 812,
+//     children: [],
+//     name: "Onboarding",
+//     blockType: "screen",
+//     id: `screen-${uuidv4()}`,
+//   },
+// ]);
+// initialItems.set("db-builder", []);
+// initialItems.set("scope-builder", []);
+
+export const useCanvasStore = create<CanvasContextType>((set) => ({
+  // tool: "ui-builder",
+  // items: initialItems,
+  scale: { x: 1, y: 1 },
+  selectedElement: null,
+  // newContainerSetup: undefined,
+  // setNewContainerSetup: (newContainerSetup) =>
+  //   set({ newContainerSetup: newContainerSetup }),
+  setScale: (scale) => set({ scale }),
+  // switchTool: (tool) => set({ tool }),
+  unselectElement: () => set({ selectedElement: null }),
+  selectElement: (element) => set({ selectedElement: element }),
+  // setItems: (items) =>
+  //   set((state) => ({ items: state.items.set(state.tool, items) })),
+}));
