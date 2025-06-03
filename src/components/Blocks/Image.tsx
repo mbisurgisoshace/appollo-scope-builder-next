@@ -39,7 +39,8 @@ export default function ImageBlock({ canvasBlock }: ImageProps) {
           alt="Image Block"
           width={canvasBlock.width}
           height={canvasBlock.height}
-          className="object-cover"
+          //className="object-cover"
+          className="object-cover w-full h-full"
         />
       ) : null}
     </DraggableResizablePosition>
