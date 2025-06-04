@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { useQuery } from "convex/react";
 import { useMutation, useStorage } from "@liveblocks/react";
 
@@ -28,11 +29,22 @@ export default function useEditor() {
 
     const { id } = event.active;
     const { x, y } = event.delta;
+    const { clientX, clientY } = event.activatorEvent;
     //const overId = event.over?.id;
     console.log("id", id);
-
+    console.log("event", event);
     // const toolItems = items.get(tool) || [];
     // const item = toolItems.find((item) => item.id === id);
+    const top = clientY - y;
+    const left = clientX - x;
+    console.log("x", x);
+    console.log("y", y);
+
+    console.log("clientX", clientX);
+    console.log("clientY", clientY);
+
+    console.log("top", top);
+    console.log("left", left);
 
     const item = items?.find((item) => item.id === id);
 
@@ -53,6 +65,8 @@ export default function useEditor() {
 
     if (id.includes("ui")) {
       const newItem = createBlock(id);
+      newItem.top = top;
+      newItem.left = left;
       addBlock(newItem);
     }
 
@@ -133,6 +147,19 @@ export default function useEditor() {
     }
   }, []);
 
+  const duplicateBlock = useMutation(({ storage }, blockId: string) => {
+    const items = storage.get("items") as LiveList<CanvasBlock>;
+    const block = items.find((item) => item.id === blockId);
+    if (!block) return;
+    const newBlock = {
+      ...block,
+      id: uuidv4(),
+      top: block.top - 30,
+      left: block.left - 30,
+    };
+    items.push(newBlock);
+  }, []);
+
   return {
     tags,
     items,
@@ -148,6 +175,7 @@ export default function useEditor() {
     handleDragEnd,
     addImageBlock,
     setIsTableOpen,
+    duplicateBlock,
     isUploadImageOpen,
     setIsUploadImageOpen,
   };

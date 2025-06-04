@@ -1,7 +1,7 @@
 "use client";
 
 import useSize from "@react-hook/size";
-import { PointerEvent, useEffect, useRef, WheelEvent } from "react";
+import { useRef, useEffect, WheelEvent, PointerEvent } from "react";
 
 import InfiniteCanvas from "./InfiniteCanvas";
 import useRenderLoop from "../../modules/core/RenderLoop";
@@ -35,8 +35,20 @@ const CanvasRoot = () => {
   };
 
   const pointerListener = (event: PointerEvent) => {
+    //console.log("event", event);
+
     CanvasStore.movePointer(event.clientX, event.clientY);
   };
+
+  // const onKeyDownListener = (event: KeyboardEvent) => {
+  //   if (event.key === "c" && (event.ctrlKey || event.metaKey)) {
+  //     console.log("Copy action triggered");
+  //   }
+
+  //   if (event.key === "v" && (event.ctrlKey || event.metaKey)) {
+  //     console.log("Paste action triggered");
+  //   }
+  // };
 
   return (
     <div className="w-full h-full">
@@ -44,6 +56,7 @@ const CanvasRoot = () => {
         ref={canvas}
         className="w-full h-full relative overflow-hidden overscroll-none"
         onWheel={wheelListener}
+        //onKeyDown={onKeyDownListener}
         onPointerMove={pointerListener}
         onPointerDown={unselectElement}
       >

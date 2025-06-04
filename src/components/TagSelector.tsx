@@ -8,7 +8,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "./ui/dropdown-menu";
-import { SettingsIcon, TagsIcon } from "lucide-react";
+import { CopyIcon, SettingsIcon, TagsIcon } from "lucide-react";
 
 import useEditor from "../modules/editor/useEditor";
 
@@ -18,7 +18,7 @@ interface TagSelectorProps {
 }
 
 export default function TagSelector({ blockId, blockTags }: TagSelectorProps) {
-  const { tags, tagBlock } = useEditor();
+  const { tags, tagBlock, duplicateBlock } = useEditor();
   return (
     <div className="absolute top-[-35px] right-3 z-[100]">
       <DropdownMenu>
@@ -26,6 +26,13 @@ export default function TagSelector({ blockId, blockTags }: TagSelectorProps) {
           <SettingsIcon />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
+          <DropdownMenuItem
+            className="flex items-center"
+            onClick={() => duplicateBlock(blockId)}
+          >
+            <CopyIcon size={18} />
+            Duplicate
+          </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="flex items-center">
               <TagsIcon size={18} className="mr-2" />
