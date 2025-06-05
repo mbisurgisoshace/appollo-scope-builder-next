@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useQuery } from "convex/react";
 import { useMutation, useStorage } from "@liveblocks/react";
@@ -9,7 +9,7 @@ import useBlock from "./useBlock";
 import { LiveList } from "@liveblocks/client";
 import { api } from "../../../convex/_generated/api";
 import { CanvasBlock, ColDefinition } from "@/types";
-import { useCanvasStore } from "../state/CanvasStore";
+import CanvasStore, { useCanvasStore } from "../state/CanvasStore";
 
 export default function useEditor() {
   const tags = useQuery(api.tags.get);
@@ -29,22 +29,13 @@ export default function useEditor() {
 
     const { id } = event.active;
     const { x, y } = event.delta;
+    const screen = CanvasStore.screen;
     const { clientX, clientY } = event.activatorEvent;
     //const overId = event.over?.id;
-    console.log("id", id);
-    console.log("event", event);
     // const toolItems = items.get(tool) || [];
     // const item = toolItems.find((item) => item.id === id);
-    const top = clientY - y;
-    const left = clientX - x;
-    console.log("x", x);
-    console.log("y", y);
-
-    console.log("clientX", clientX);
-    console.log("clientY", clientY);
-
-    console.log("top", top);
-    console.log("left", left);
+    const top = clientY + y + screen.y;
+    const left = clientX + x + screen.x;
 
     const item = items?.find((item) => item.id === id);
 

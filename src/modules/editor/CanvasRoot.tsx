@@ -35,8 +35,6 @@ const CanvasRoot = () => {
   };
 
   const pointerListener = (event: PointerEvent) => {
-    //console.log("event", event);
-
     CanvasStore.movePointer(event.clientX, event.clientY);
   };
 
