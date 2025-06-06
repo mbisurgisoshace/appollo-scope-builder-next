@@ -15,6 +15,7 @@ import {
 import { Button } from "./ui/button";
 import { api } from "../../convex/_generated/api";
 import useEditor from "../modules/editor/useEditor";
+import CanvasStore from "@/modules/state/CanvasStore";
 
 interface UploadImageProps {
   isOpen: boolean;
@@ -44,7 +45,9 @@ export default function UploadImage({ isOpen, onClose }: UploadImageProps) {
 
     const { storageId } = await result.json();
 
-    addImageBlock(storageId);
+    const coords = CanvasStore.getNewBlockCoords();
+
+    addImageBlock(storageId, coords.top, coords.left);
     onClose();
   };
 

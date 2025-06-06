@@ -14,6 +14,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import useEditor from "../modules/editor/useEditor";
+import CanvasStore from "@/modules/state/CanvasStore";
 
 interface CreateGridProps {
   isOpen: boolean;
@@ -31,7 +32,9 @@ export default function CreateGrid({ isOpen, onClose }: CreateGridProps) {
     const cols = parseInt(colsRef.current?.value || "0", 10);
 
     if (rows > 0 && cols > 0) {
-      addGridBlock(rows, cols);
+      const coords = CanvasStore.getNewBlockCoords();
+
+      addGridBlock(rows, cols, coords.top, coords.left);
       onClose();
     }
   };

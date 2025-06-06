@@ -16,6 +16,7 @@ import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import useEditor from "../modules/editor/useEditor";
+import CanvasStore from "@/modules/state/CanvasStore";
 
 interface CreateGridProps {
   isOpen: boolean;
@@ -34,7 +35,9 @@ export default function CreateTable({ isOpen, onClose }: CreateGridProps) {
       id: col.toLowerCase().replace(/\s+/g, "_"),
     }));
 
-    addTableBlock(colsDefinition);
+    const coords = CanvasStore.getNewBlockCoords();
+
+    addTableBlock(colsDefinition, coords.top, coords.left);
     onClose();
   };
 

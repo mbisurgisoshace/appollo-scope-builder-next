@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useQuery } from "convex/react";
 import { useMutation, useStorage } from "@liveblocks/react";
@@ -39,6 +39,8 @@ export default function useEditor() {
 
     const item = items?.find((item) => item.id === id);
 
+    CanvasStore.setNewBlockCoords(top, left);
+
     if (id === "ui-grid") {
       setIsGridOpen(true);
       return;
@@ -73,26 +75,43 @@ export default function useEditor() {
     items.push(block);
   }, []);
 
-  const addImageBlock = useMutation(({ storage }, storageId: string) => {
-    const imageBlock = createImageBlock(storageId);
-    const items = storage.get("items") as LiveList<CanvasBlock>;
-    items.push(imageBlock);
-  }, []);
+  const addImageBlock = useMutation(
+    ({ storage }, storageId: string, top: number, left: number) => {
+      const imageBlock = createImageBlock(storageId);
+      imageBlock.top = top;
+      imageBlock.left = left;
+      const items = storage.get("items") as LiveList<CanvasBlock>;
+      items.push(imageBlock);
+      CanvasStore.setNewBlockCoords(0, 0);
+    },
+    []
+  );
 
   const addGridBlock = useMutation(
-    ({ storage }, rows: number, cols: number) => {
+    ({ storage }, rows: number, cols: number, top: number, left: number) => {
       const gridBlock = createGridBLock(rows, cols);
+      gridBlock.top = top;
+      gridBlock.left = left;
       const items = storage.get("items") as LiveList<CanvasBlock>;
       items.push(gridBlock);
+      CanvasStore.setNewBlockCoords(0, 0);
     },
     []
   );
 
   const addTableBlock = useMutation(
-    ({ storage }, colDefinitions: ColDefinition[]) => {
+    (
+      { storage },
+      colDefinitions: ColDefinition[],
+      top: number,
+      left: number
+    ) => {
       const tableBlock = createTableBlock(colDefinitions);
+      tableBlock.top = top;
+      tableBlock.left = left;
       const items = storage.get("items") as LiveList<CanvasBlock>;
       items.push(tableBlock);
+      CanvasStore.setNewBlockCoords(0, 0);
     },
     []
   );

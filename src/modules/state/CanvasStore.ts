@@ -11,6 +11,8 @@ import { CAMERA_ANGLE, RECT_H, RECT_W } from "../core/constants";
 
 export interface CanvasState {
   shouldRender: boolean;
+  newBlockTop: number;
+  newBlockLeft: number;
   pixelRatio: number; // our resolution for dip calculations
   container: {
     //holds information related to our screen container
@@ -32,6 +34,8 @@ export interface CanvasState {
 const getInitialCanvasState = (): CanvasState => {
   return {
     shouldRender: true,
+    newBlockTop: 0,
+    newBlockLeft: 0,
     pixelRatio: window.devicePixelRatio || 1,
     container: {
       width: 0,
@@ -57,6 +61,8 @@ export default class CanvasStore {
     if (!canvasData)
       canvasData = {
         shouldRender: true,
+        newBlockTop: 0,
+        newBlockLeft: 0,
         pixelRatio: window.devicePixelRatio || 1,
         container: {
           width: 0,
@@ -167,6 +173,15 @@ export default class CanvasStore {
     }
   }
 
+  public static getNewBlockCoords() {
+    return { top: this.data.newBlockTop, left: this.data.newBlockLeft };
+  }
+
+  public static setNewBlockCoords(top: number, left: number) {
+    this.data.newBlockTop = top;
+    this.data.newBlockLeft = left;
+    this.shouldRender = true;
+  }
   //@ts-ignore
   public static zoomCamera(deltaX: number, deltaY: number) {
     // Normal zoom is quite slow, we want to scale the amount quite a bit
