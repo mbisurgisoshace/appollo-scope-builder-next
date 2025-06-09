@@ -6,12 +6,16 @@ import {
   TableBlock,
   ImageBlock,
   CanvasBlock,
+  CircleBlock,
+  SquareBlock,
   ColDefinition,
   InterviewBlock,
 } from "@/types";
 
 export default function useBlock() {
   const createBlock = (blockType: BlockType): CanvasBlock => {
+    if (blockType === "ui-circle") return createCircleBlock();
+    if (blockType === "ui-square") return createSquareBlock();
     if (blockType === "ui-interview") return createInterviewBlock();
 
     throw new Error("Invalid block type");
@@ -75,6 +79,32 @@ export default function useBlock() {
       width: 250,
       height: 250,
       blockType: "image",
+    };
+  }
+
+  function createCircleBlock(): CircleBlock {
+    return {
+      id: `circle-${uuidv4()}`,
+      top: 0,
+      left: 0,
+      tags: [],
+      text: "",
+      width: 250,
+      height: 250,
+      blockType: "circle",
+    };
+  }
+
+  function createSquareBlock(): SquareBlock {
+    return {
+      id: `square-${uuidv4()}`,
+      top: 0,
+      left: 0,
+      tags: [],
+      text: "",
+      width: 250,
+      height: 250,
+      blockType: "square",
     };
   }
 

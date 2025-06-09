@@ -1,7 +1,13 @@
 import type { JsonObject } from "@liveblocks/client";
 
+export type BlockType =
+  | "ui-grid"
+  | "ui-image"
+  | "ui-table"
+  | "ui-circle"
+  | "ui-square"
+  | "ui-interview";
 export type ColDefinition = { id: string; name: string };
-export type BlockType = "ui-interview" | "ui-image" | "ui-table" | "ui-grid";
 
 export interface Block extends JsonObject {
   id: string;
@@ -12,6 +18,15 @@ export interface Block extends JsonObject {
   tags: string[];
 }
 
+export interface CircleBlock extends Block {
+  blockType: "circle";
+  text: string;
+}
+
+export interface SquareBlock extends Block {
+  blockType: "square";
+  text: string;
+}
 export interface ImageBlock extends Block {
   blockType: "image";
   storageId: string;
@@ -34,4 +49,10 @@ export interface TableBlock extends Block {
   colsDefinition: ColDefinition[];
 }
 
-export type CanvasBlock = InterviewBlock | ImageBlock | GridBlock | TableBlock;
+export type CanvasBlock =
+  | GridBlock
+  | ImageBlock
+  | TableBlock
+  | CircleBlock
+  | SquareBlock
+  | InterviewBlock;

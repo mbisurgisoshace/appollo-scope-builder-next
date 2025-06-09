@@ -1,4 +1,11 @@
-import { TypeIcon, ImageIcon, TableIcon, Grid3X3Icon } from "lucide-react";
+import {
+  TypeIcon,
+  ImageIcon,
+  TableIcon,
+  Grid3X3Icon,
+  SquareIcon,
+  CircleIcon,
+} from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
 
 import TagCreator from "./TagCreator";
@@ -50,6 +57,18 @@ export default function Toolbar() {
         <div className="flex flex-col items-center">
           <TableIcon />
           <span>Table</span>
+        </div>
+      </ToolbarDraggable>
+      <ToolbarDraggable id="ui-square">
+        <div className="flex flex-col items-center">
+          <SquareIcon />
+          <span>Square</span>
+        </div>
+      </ToolbarDraggable>
+      <ToolbarDraggable id="ui-circle">
+        <div className="flex flex-col items-center">
+          <CircleIcon />
+          <span>Circle</span>
         </div>
       </ToolbarDraggable>
       <ToolbarDraggable id="ui-image">
