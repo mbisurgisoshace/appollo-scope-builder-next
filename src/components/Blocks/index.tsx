@@ -4,6 +4,7 @@ import Table from "./Table";
 import Square from "./Square";
 import Interview from "./Interview";
 import { CanvasBlock } from "@/types";
+import Circle from "./Circle";
 
 export interface BlockProps {
   canvasBlock: CanvasBlock;
@@ -20,6 +21,10 @@ export default function Block({ canvasBlock }: BlockProps) {
 
   if (canvasBlock.blockType === "image") {
     return <Image canvasBlock={canvasBlock} />;
+  }
+
+  if (canvasBlock.blockType === "circle") {
+    return <Circle canvasBlock={canvasBlock} />;
   }
 
   if (canvasBlock.blockType === "square") {
