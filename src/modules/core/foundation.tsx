@@ -18,6 +18,7 @@ export interface CanvasPosition extends React.HTMLProps<HTMLDivElement> {
   width: number;
   height: number;
   canvasBlock: CanvasBlock;
+  selectedBoxSizeAdjustment?: { width: number; height: number };
 }
 
 export const DraggablePosition = ({
@@ -126,6 +127,7 @@ export const DraggableResizablePosition = ({
   height,
   children,
   canvasBlock,
+  selectedBoxSizeAdjustment,
   ...props
 }: PropsWithChildren<CanvasPosition>) => {
   const { resizeBlock } = useEditor();
@@ -138,6 +140,9 @@ export const DraggableResizablePosition = ({
   });
 
   const screen = CanvasStore.screen;
+
+  const selectedBoxAdjustedWidth = selectedBoxSizeAdjustment?.width || 0;
+  const selectedBoxAdjustedHeight = selectedBoxSizeAdjustment?.height || 0;
 
   if (
     inBounds(
@@ -159,8 +164,8 @@ export const DraggableResizablePosition = ({
         }}
         handle={
           <div
-            style={{ zIndex: 100 }}
-            className="w-4 h-4 border-[2px] border-[#6A35FF] absolute right-[-7px] bottom-[-7px] cursor-grab"
+            style={{ zIndex: 100, right: -7 - selectedBoxAdjustedWidth / 2 }}
+            className="w-4 h-4 border-[2px] bg-white border-[#6A35FF] absolute bottom-[-7px] cursor-grab"
           />
         }
       >
@@ -206,10 +211,10 @@ export const DraggableResizablePosition = ({
               {...attributes}
               style={{
                 top: -8,
-                left: -8,
-                width: width + 16,
-                height: height + 16,
+                left: -8 - selectedBoxAdjustedWidth / 2,
                 position: "absolute",
+                width: width + 16 + selectedBoxAdjustedWidth,
+                height: height + 16 + selectedBoxAdjustedHeight,
                 //border: "25px solid #6A35FF",
               }}
               className="border-[5px] border-gray-100 cursor-grab"

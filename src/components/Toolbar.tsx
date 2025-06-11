@@ -71,16 +71,19 @@ export default function Toolbar() {
           <span>Circle</span>
         </div>
       </ToolbarDraggable>
+      <ToolbarDraggable id="ui-parallelogram">
+        <div className="flex flex-col items-center">
+          <CircleIcon />
+          <span>Parallelogram</span>
+        </div>
+      </ToolbarDraggable>
       <ToolbarDraggable id="ui-image">
         <div className="flex flex-col items-center">
           <ImageIcon />
           <span>Image</span>
         </div>
       </ToolbarDraggable>
-      {/* <div className="flex flex-col items-center">
-        <TagsIcon />
-        <span>Tags</span>
-      </div> */}
+
       <TagCreator />
     </div>
   );

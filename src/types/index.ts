@@ -6,7 +6,8 @@ export type BlockType =
   | "ui-table"
   | "ui-circle"
   | "ui-square"
-  | "ui-interview";
+  | "ui-interview"
+  | "ui-parallelogram";
 export type ColDefinition = { id: string; name: string };
 
 export interface Block extends JsonObject {
@@ -49,10 +50,16 @@ export interface TableBlock extends Block {
   colsDefinition: ColDefinition[];
 }
 
+export interface ParallelogramBlock extends Block {
+  blockType: "parallelogram";
+  text: string;
+}
+
 export type CanvasBlock =
   | GridBlock
   | ImageBlock
   | TableBlock
   | CircleBlock
   | SquareBlock
-  | InterviewBlock;
+  | InterviewBlock
+  | ParallelogramBlock;

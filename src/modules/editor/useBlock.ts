@@ -10,6 +10,7 @@ import {
   SquareBlock,
   ColDefinition,
   InterviewBlock,
+  ParallelogramBlock,
 } from "@/types";
 
 export default function useBlock() {
@@ -17,6 +18,7 @@ export default function useBlock() {
     if (blockType === "ui-circle") return createCircleBlock();
     if (blockType === "ui-square") return createSquareBlock();
     if (blockType === "ui-interview") return createInterviewBlock();
+    if (blockType === "ui-parallelogram") return createParallelogramBlock();
 
     throw new Error("Invalid block type");
   };
@@ -117,6 +119,19 @@ export default function useBlock() {
       width: 750,
       height: 250,
       blockType: "interview",
+    };
+  }
+
+  function createParallelogramBlock(): ParallelogramBlock {
+    return {
+      id: `parallelogram-${uuidv4()}`,
+      top: 0,
+      left: 0,
+      tags: [],
+      text: "",
+      width: 250,
+      height: 250,
+      blockType: "parallelogram",
     };
   }
 
