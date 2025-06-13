@@ -1,10 +1,9 @@
 import { memo } from "react";
-import { useStorage } from "@liveblocks/react";
 import Xarrow from "react-xarrows";
+import { useStorage } from "@liveblocks/react";
 
 import Block from "@/components/Blocks";
 import CanvasStore from "../state/CanvasStore";
-import useEditor from "./useEditor";
 
 const InfiniteCanvas = ({}: { frame: string }) => {
   const scale = CanvasStore.scale;

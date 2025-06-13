@@ -6,7 +6,6 @@ import { useRef, useEffect, WheelEvent, PointerEvent } from "react";
 import InfiniteCanvas from "./InfiniteCanvas";
 import useRenderLoop from "../../modules/core/RenderLoop";
 import CanvasStore, { useCanvasStore } from "../../modules/state/CanvasStore";
-import useEditor from "./useEditor";
 
 const CanvasRoot = () => {
   const setScale = useCanvasStore((state) => state.setScale);
