@@ -26,18 +26,15 @@ const Editor = () => {
     <div className="w-full h-full relative">
       <DndContext
         id="editor"
-        onDragMove={() => {
+        onDragMove={(e) => {
           // updateXarrow();
           CanvasStore.shouldRender = true;
         }}
         onDragEnd={handleDragEnd}
-        onDragStart={(data) => {
-          const { active } = data;
+        onDragStart={(e) => {
+          const { active } = e;
           setActive(active);
         }}
-        // modifiers={
-        //   active && active.data.current ? active.data.current.modifiers : []
-        // }
       >
         <Navbar />
         <Toolbar />

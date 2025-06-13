@@ -13,6 +13,7 @@ export interface CanvasState {
   shouldRender: boolean;
   newBlockTop: number;
   newBlockLeft: number;
+  arrowStartNode: string | null;
   pixelRatio: number; // our resolution for dip calculations
   container: {
     //holds information related to our screen container
@@ -36,6 +37,7 @@ const getInitialCanvasState = (): CanvasState => {
     shouldRender: true,
     newBlockTop: 0,
     newBlockLeft: 0,
+    arrowStartNode: null,
     pixelRatio: window.devicePixelRatio || 1,
     container: {
       width: 0,
@@ -63,6 +65,7 @@ export default class CanvasStore {
         shouldRender: true,
         newBlockTop: 0,
         newBlockLeft: 0,
+        arrowStartNode: null,
         pixelRatio: window.devicePixelRatio || 1,
         container: {
           width: 0,
@@ -122,7 +125,7 @@ export default class CanvasStore {
     return canvasData.container;
   }
 
-  private static get pointer() {
+  public static get pointer() {
     return canvasData.pointer;
   }
 
@@ -182,6 +185,16 @@ export default class CanvasStore {
     this.data.newBlockLeft = left;
     this.shouldRender = true;
   }
+
+  public static getStartArrowNode() {
+    return this.data.arrowStartNode;
+  }
+
+  public static setArrowStartNode(nodeId: string | null) {
+    this.data.arrowStartNode = nodeId;
+    this.shouldRender = true;
+  }
+
   //@ts-ignore
   public static zoomCamera(deltaX: number, deltaY: number) {
     // Normal zoom is quite slow, we want to scale the amount quite a bit
@@ -228,6 +241,8 @@ export default class CanvasStore {
 
     this.data.pointer.x = left + deltaX / scale.x;
     this.data.pointer.y = top + deltaY / scale.y;
+
+    this.shouldRender = true;
   }
 }
 

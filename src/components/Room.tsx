@@ -20,6 +20,7 @@ export default function Room({ roomId }: RoomProps) {
         id={roomId}
         initialStorage={{
           items: new LiveList([]),
+          arrows: new LiveList([]),
         }}
       >
         <ClientSideSuspense

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useQuery } from "convex/react";
 import { useMutation, useStorage } from "@liveblocks/react";
@@ -8,7 +8,7 @@ import { useMutation, useStorage } from "@liveblocks/react";
 import useBlock from "./useBlock";
 import { LiveList } from "@liveblocks/client";
 import { api } from "../../../convex/_generated/api";
-import { CanvasBlock, ColDefinition } from "@/types";
+import { Arrow, CanvasBlock, ColDefinition } from "@/types";
 import CanvasStore, { useCanvasStore } from "../state/CanvasStore";
 
 export default function useEditor() {
@@ -20,6 +20,7 @@ export default function useEditor() {
   const scale = useCanvasStore((state) => state.scale);
 
   const [active, setActive] = useState<any>(null);
+  const [arrows, setArrows] = useState<any[]>([]);
   const [isGridOpen, setIsGridOpen] = useState(false);
   const [isTableOpen, setIsTableOpen] = useState(false);
   const [isUploadImageOpen, setIsUploadImageOpen] = useState(false);
@@ -170,10 +171,42 @@ export default function useEditor() {
     items.push(newBlock);
   }, []);
 
+  // const startDrawingArrow = (startBlockId: string) => {
+  //   if (!CanvasStore.getStartArrowNode()) {
+  //     CanvasStore.setArrowStartNode(startBlockId);
+  //   } else if (CanvasStore.getStartArrowNode() !== startBlockId) {
+  //     const newArrow = {
+  //       id: uuidv4(),
+  //       start: CanvasStore.getStartArrowNode(),
+  //       end: startBlockId,
+  //     };
+  //     setArrows((prev) => [...prev, newArrow]);
+  //     CanvasStore.setArrowStartNode(null);
+  //   }
+  // };
+
+  const startDrawingArrow = useMutation(({ storage }, startBlockId: string) => {
+    if (!CanvasStore.getStartArrowNode()) {
+      CanvasStore.setArrowStartNode(startBlockId);
+    } else if (CanvasStore.getStartArrowNode() !== startBlockId) {
+      const newArrow = {
+        id: uuidv4(),
+        start: CanvasStore.getStartArrowNode()!,
+        end: startBlockId,
+      };
+      const arrows = storage.get("arrows") as LiveList<Arrow>;
+      arrows.push(newArrow);
+      CanvasStore.setArrowStartNode(null);
+    }
+  }, []);
+
+  console.log("arrows", arrows);
+
   return {
     tags,
     items,
     active,
+    arrows,
     tagBlock,
     setActive,
     isGridOpen,
@@ -186,6 +219,7 @@ export default function useEditor() {
     addImageBlock,
     setIsTableOpen,
     duplicateBlock,
+    startDrawingArrow,
     isUploadImageOpen,
     setIsUploadImageOpen,
   };

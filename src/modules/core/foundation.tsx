@@ -10,6 +10,12 @@ import { CanvasBlock } from "@/types";
 import useEditor from "../editor/useEditor";
 import TagSelector from "@/components/TagSelector";
 import CanvasStore, { useCanvasStore } from "../state/CanvasStore";
+import {
+  CircleChevronDownIcon,
+  CircleChevronLeftIcon,
+  CircleChevronRightIcon,
+  CircleChevronUpIcon,
+} from "lucide-react";
 
 export interface CanvasPosition extends React.HTMLProps<HTMLDivElement> {
   id: string;
@@ -21,6 +27,13 @@ export interface CanvasPosition extends React.HTMLProps<HTMLDivElement> {
   selectedBoxSizeAdjustment?: { width: number; height: number };
 }
 
+const arrowsDirections = [
+  "arrow-up",
+  "arrow-down",
+  "arrow-left",
+  "arrow-right",
+];
+
 export const DraggablePosition = ({
   id,
   top,
@@ -31,6 +44,7 @@ export const DraggablePosition = ({
   canvasBlock,
   ...props
 }: PropsWithChildren<CanvasPosition>) => {
+  const { startDrawingArrow } = useEditor();
   const scale = useCanvasStore((state) => state.scale);
   const selectElement = useCanvasStore((state) => state.selectElement);
   const selectedElement = useCanvasStore((state) => state.selectedElement);
@@ -99,11 +113,10 @@ export const DraggablePosition = ({
               position: "absolute",
               //border: "25px solid #6A35FF",
             }}
+            onDoubleClick={(e) => startDrawingArrow(id)}
             className="border-[5px] border-gray-100 cursor-grab"
             onPointerDown={(e) => {
               //selectElement(canvasBlock);
-              console.log("e", e);
-
               if (listeners && listeners.onPointerDown) {
                 listeners.onPointerDown(e);
                 e.preventDefault();
@@ -130,8 +143,8 @@ export const DraggableResizablePosition = ({
   selectedBoxSizeAdjustment,
   ...props
 }: PropsWithChildren<CanvasPosition>) => {
-  const { resizeBlock } = useEditor();
   const scale = useCanvasStore((state) => state.scale);
+  const { resizeBlock, startDrawingArrow } = useEditor();
   const selectElement = useCanvasStore((state) => state.selectElement);
   const selectedElement = useCanvasStore((state) => state.selectedElement);
 
@@ -217,10 +230,14 @@ export const DraggableResizablePosition = ({
                 height: height + 16 + selectedBoxAdjustedHeight,
                 //border: "25px solid #6A35FF",
               }}
+              onDoubleClick={(e) => startDrawingArrow(id)}
               className="border-[5px] border-gray-100 cursor-grab"
               onPointerDown={(e) => {
                 //selectElement(canvasBlock);
-                console.log("e", e);
+                // if (arrowsDirections.includes((e.target as any).id)) {
+                //   e.preventDefault();
+                //   e.stopPropagation();
+                // }
 
                 if (listeners && listeners.onPointerDown) {
                   listeners.onPointerDown(e);
@@ -230,6 +247,22 @@ export const DraggableResizablePosition = ({
               }}
             >
               <div className="w-full h-full border-[1.5px] border-[#6A35FF]" />
+              <CircleChevronUpIcon
+                id="arrow-up"
+                className="absolute left-1/2 -top-8  -translate-x-1/2"
+              />
+              <CircleChevronLeftIcon
+                id="arrow-left"
+                className="absolute top-1/2 -left-7 -translate-y-1/2"
+              />
+              <CircleChevronDownIcon
+                id="arrow-down"
+                className="absolute left-1/2 -bottom-8  -translate-x-1/2"
+              />
+              <CircleChevronRightIcon
+                id="arrow-right"
+                className="absolute top-1/2 -right-7 -translate-y-1/2"
+              />
             </div>
           )}
         </div>

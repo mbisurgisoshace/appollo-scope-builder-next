@@ -2,7 +2,7 @@
 
 import { LiveList } from "@liveblocks/client";
 
-import { CanvasBlock } from "@/types";
+import { Arrow, CanvasBlock } from "@/types";
 
 // https://liveblocks.io/docs/api-reference/liveblocks-react#Typing-your-data
 declare global {
@@ -15,6 +15,7 @@ declare global {
 
     // The Storage tree for the room, for useMutation, useStorage, etc.
     Storage: {
+      arrows: LiveList<Arrow>;
       items: LiveList<CanvasBlock>;
     };
 

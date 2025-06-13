@@ -8,8 +8,14 @@ export type BlockType =
   | "ui-square"
   | "ui-interview"
   | "ui-parallelogram";
+
 export type ColDefinition = { id: string; name: string };
 
+export type Arrow = {
+  id: string;
+  end: string;
+  start: string;
+};
 export interface Block extends JsonObject {
   id: string;
   top: number;

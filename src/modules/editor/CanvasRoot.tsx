@@ -6,6 +6,7 @@ import { useRef, useEffect, WheelEvent, PointerEvent } from "react";
 import InfiniteCanvas from "./InfiniteCanvas";
 import useRenderLoop from "../../modules/core/RenderLoop";
 import CanvasStore, { useCanvasStore } from "../../modules/state/CanvasStore";
+import useEditor from "./useEditor";
 
 const CanvasRoot = () => {
   const setScale = useCanvasStore((state) => state.setScale);
@@ -52,11 +53,13 @@ const CanvasRoot = () => {
     <div className="w-full h-full">
       <div
         ref={canvas}
-        className="w-full h-full relative overflow-hidden overscroll-none"
         onWheel={wheelListener}
         //onKeyDown={onKeyDownListener}
         onPointerMove={pointerListener}
-        onPointerDown={unselectElement}
+        onPointerDown={() => {
+          unselectElement();
+        }}
+        className="w-full h-full relative overflow-hidden overscroll-none"
       >
         <InfiniteCanvas frame={frame} />
       </div>
