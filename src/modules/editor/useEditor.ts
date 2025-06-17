@@ -200,8 +200,6 @@ export default function useEditor() {
     }
   }, []);
 
-  console.log("arrows", arrows);
-
   return {
     tags,
     items,

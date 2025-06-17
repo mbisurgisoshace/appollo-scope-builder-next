@@ -39,13 +39,7 @@ const CanvasRoot = () => {
   };
 
   // const onKeyDownListener = (event: KeyboardEvent) => {
-  //   if (event.key === "c" && (event.ctrlKey || event.metaKey)) {
-  //     console.log("Copy action triggered");
-  //   }
-
-  //   if (event.key === "v" && (event.ctrlKey || event.metaKey)) {
-  //     console.log("Paste action triggered");
-  //   }
+  //   console.log("Key pressed:", event.key);
   // };
 
   return (

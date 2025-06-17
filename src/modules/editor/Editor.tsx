@@ -9,6 +9,7 @@ import Toolbar from "@/components/Toolbar";
 import CreateGrid from "@/components/CreateGrid";
 import CreateTable from "@/components/CreateTable";
 import UploadImage from "@/components/UploadImage";
+import { useEffect } from "react";
 
 const Editor = () => {
   const {
@@ -21,6 +22,14 @@ const Editor = () => {
     isUploadImageOpen,
     setIsUploadImageOpen,
   } = useEditor();
+
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        CanvasStore.setArrowStartNode(null);
+      }
+    });
+  }, []);
 
   return (
     <div className="w-full h-full relative">
