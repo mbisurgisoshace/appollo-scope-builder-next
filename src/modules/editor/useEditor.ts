@@ -171,20 +171,6 @@ export default function useEditor() {
     items.push(newBlock);
   }, []);
 
-  // const startDrawingArrow = (startBlockId: string) => {
-  //   if (!CanvasStore.getStartArrowNode()) {
-  //     CanvasStore.setArrowStartNode(startBlockId);
-  //   } else if (CanvasStore.getStartArrowNode() !== startBlockId) {
-  //     const newArrow = {
-  //       id: uuidv4(),
-  //       start: CanvasStore.getStartArrowNode(),
-  //       end: startBlockId,
-  //     };
-  //     setArrows((prev) => [...prev, newArrow]);
-  //     CanvasStore.setArrowStartNode(null);
-  //   }
-  // };
-
   const startDrawingArrow = useMutation(({ storage }, startBlockId: string) => {
     if (!CanvasStore.getStartArrowNode()) {
       CanvasStore.setArrowStartNode(startBlockId);
@@ -199,6 +185,22 @@ export default function useEditor() {
       CanvasStore.setArrowStartNode(null);
     }
   }, []);
+
+  const editBlockStyle = useMutation(
+    ({ storage }, blockId: string, styleProp: string, styleValue: string) => {
+      const items = storage.get("items") as LiveList<CanvasBlock>;
+      const block = items.find((item) => item.id === blockId);
+      const blockIndex = items.findIndex((item) => item.id === blockId);
+      if (block) {
+        block.style = {
+          ...block.style,
+          [styleProp as string]: styleValue,
+        };
+        items.set(blockIndex, block);
+      }
+    },
+    []
+  );
 
   return {
     tags,
@@ -217,6 +219,7 @@ export default function useEditor() {
     addImageBlock,
     setIsTableOpen,
     duplicateBlock,
+    editBlockStyle,
     startDrawingArrow,
     isUploadImageOpen,
     setIsUploadImageOpen,

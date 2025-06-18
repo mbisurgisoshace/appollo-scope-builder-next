@@ -1,7 +1,9 @@
 import { LiveList } from "@liveblocks/client";
 import { useMutation } from "@liveblocks/react";
 
+import ColorPicker from "../ColorPicker";
 import { Textarea } from "../ui/textarea";
+import useEditor from "@/modules/editor/useEditor";
 import { CanvasBlock, CircleBlock as CircleBlockType } from "@/types";
 import { DraggableResizablePosition } from "../../modules/core/foundation";
 
@@ -10,7 +12,8 @@ export interface CircleProps {
 }
 
 export default function CircleBlock({ canvasBlock }: CircleProps) {
-  const { width, height, text } = canvasBlock;
+  const { editBlockStyle } = useEditor();
+  const { id, width, height, text, style } = canvasBlock;
 
   const onTextChange = useMutation(({ storage }, value: string) => {
     const items = storage.get("items") as LiveList<CanvasBlock>;
@@ -40,6 +43,7 @@ export default function CircleBlock({ canvasBlock }: CircleProps) {
         style={{
           width: `${canvasBlock.width}px`,
           height: `${canvasBlock.height}px`,
+          ...style,
         }}
         className="border border-gray-300 bg-white rounded-full shadow-sm flex items-center justify-center"
       >
@@ -50,6 +54,10 @@ export default function CircleBlock({ canvasBlock }: CircleProps) {
           className="w-full h-full border-transparent shadow-none outline-none focus:ring-0 focus:border-transparent"
         />
       </div>
+      <ColorPicker
+        backgroundColor={style?.backgroundColor}
+        onChangeColor={(value) => editBlockStyle(id, "backgroundColor", value)}
+      />
     </DraggableResizablePosition>
   );
 }

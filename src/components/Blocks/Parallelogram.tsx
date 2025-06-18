@@ -5,7 +5,9 @@ import {
   CanvasBlock,
   ParallelogramBlock as ParallelogramBlockType,
 } from "@/types";
+import ColorPicker from "../ColorPicker";
 import { Textarea } from "../ui/textarea";
+import useEditor from "@/modules/editor/useEditor";
 import { DraggableResizablePosition } from "../../modules/core/foundation";
 
 import "./index.css";
@@ -17,7 +19,8 @@ export interface ParallelogramProps {
 export default function ParallelogramBlock({
   canvasBlock,
 }: ParallelogramProps) {
-  const { width, height, text } = canvasBlock;
+  const { editBlockStyle } = useEditor();
+  const { id, width, height, text, style } = canvasBlock;
 
   const onTextChange = useMutation(({ storage }, value: string) => {
     const items = storage.get("items") as LiveList<CanvasBlock>;
@@ -46,6 +49,7 @@ export default function ParallelogramBlock({
         style={{
           width: `${canvasBlock.width}px`,
           height: `${canvasBlock.height}px`,
+          ...style,
         }}
         className="parallelogram border border-gray-300 bg-white rounded-lg shadow-sm flex items-center justify-center"
       >
@@ -55,6 +59,10 @@ export default function ParallelogramBlock({
           className="w-full h-full border-none outline-none"
         />
       </div>
+      <ColorPicker
+        backgroundColor={style?.backgroundColor}
+        onChangeColor={(value) => editBlockStyle(id, "backgroundColor", value)}
+      />
     </DraggableResizablePosition>
   );
 }

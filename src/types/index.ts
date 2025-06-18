@@ -23,6 +23,7 @@ export interface Block extends JsonObject {
   width: number;
   height: number;
   tags: string[];
+  style?: Record<string, string>;
 }
 
 export interface CircleBlock extends Block {
