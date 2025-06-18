@@ -137,6 +137,7 @@ export default function useBlock() {
       text: "",
       width: 250,
       height: 250,
+      stackOrder: 0,
       blockType: "parallelogram",
     };
   }
