@@ -43,6 +43,14 @@ export default function ParallelogramBlock({
       canvasBlock={canvasBlock}
       width={canvasBlock.width}
       height={canvasBlock.height}
+      otherTools={
+        <ColorPicker
+          backgroundColor={style?.backgroundColor}
+          onChangeColor={(value) =>
+            editBlockStyle(id, "backgroundColor", value)
+          }
+        />
+      }
       selectedBoxSizeAdjustment={{ width: 85, height: 0 }}
     >
       <div
@@ -59,10 +67,6 @@ export default function ParallelogramBlock({
           className="w-full h-full border-none outline-none"
         />
       </div>
-      <ColorPicker
-        backgroundColor={style?.backgroundColor}
-        onChangeColor={(value) => editBlockStyle(id, "backgroundColor", value)}
-      />
     </DraggableResizablePosition>
   );
 }

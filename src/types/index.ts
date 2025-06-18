@@ -23,7 +23,8 @@ export interface Block extends JsonObject {
   width: number;
   height: number;
   tags: string[];
-  style?: Record<string, string>;
+  stackOrder: number;
+  style?: Record<string, any>;
 }
 
 export interface CircleBlock extends Block {

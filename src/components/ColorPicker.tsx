@@ -26,7 +26,7 @@ export default function ColorPicker({
     <div className="absolute top-[-35px] right-12 z-[100]">
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <PaintBucketIcon />
+          <PaintBucketIcon id="color-picker" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <HexColorPicker color={backgroundColor} onChange={onChangeColor} />

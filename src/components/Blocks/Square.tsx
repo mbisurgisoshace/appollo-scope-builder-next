@@ -36,6 +36,14 @@ export default function SquareBlock({ canvasBlock }: SquareProps) {
       canvasBlock={canvasBlock}
       width={canvasBlock.width}
       height={canvasBlock.height}
+      otherTools={
+        <ColorPicker
+          backgroundColor={style?.backgroundColor}
+          onChangeColor={(value) =>
+            editBlockStyle(id, "backgroundColor", value)
+          }
+        />
+      }
     >
       <div
         style={{
@@ -51,10 +59,6 @@ export default function SquareBlock({ canvasBlock }: SquareProps) {
           className="w-full h-full border-none outline-none"
         />
       </div>
-      <ColorPicker
-        backgroundColor={style?.backgroundColor}
-        onChangeColor={(value) => editBlockStyle(id, "backgroundColor", value)}
-      />
     </DraggableResizablePosition>
   );
 }

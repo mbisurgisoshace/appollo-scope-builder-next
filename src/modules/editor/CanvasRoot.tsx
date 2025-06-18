@@ -7,6 +7,8 @@ import InfiniteCanvas from "./InfiniteCanvas";
 import useRenderLoop from "../../modules/core/RenderLoop";
 import CanvasStore, { useCanvasStore } from "../../modules/state/CanvasStore";
 
+const SELECTED_IDS = ["resize-handle", "color-picker"];
+
 const CanvasRoot = () => {
   const setScale = useCanvasStore((state) => state.setScale);
   const unselectElement = useCanvasStore((state) => state.unselectElement);
@@ -49,8 +51,11 @@ const CanvasRoot = () => {
         onWheel={wheelListener}
         //onKeyDown={onKeyDownListener}
         onPointerMove={pointerListener}
-        onPointerDown={() => {
-          unselectElement();
+        onPointerDown={(e) => {
+          console.log("e", e);
+
+          if ((e.target as HTMLDivElement).id === "infinite-canvas")
+            unselectElement();
         }}
         className="w-full h-full relative overflow-hidden overscroll-none"
       >

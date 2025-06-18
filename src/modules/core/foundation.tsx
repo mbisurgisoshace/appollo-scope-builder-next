@@ -24,6 +24,7 @@ export interface CanvasPosition extends React.HTMLProps<HTMLDivElement> {
   width: number;
   height: number;
   canvasBlock: CanvasBlock;
+  otherTools?: React.ReactNode;
   selectedBoxSizeAdjustment?: { width: number; height: number };
 }
 
@@ -41,6 +42,7 @@ export const DraggablePosition = ({
   width,
   height,
   children,
+  otherTools,
   canvasBlock,
   ...props
 }: PropsWithChildren<CanvasPosition>) => {
@@ -54,6 +56,8 @@ export const DraggablePosition = ({
   });
 
   const screen = CanvasStore.screen;
+
+  const isSelected = selectedElement && selectedElement.id === id;
 
   if (
     inBounds(
@@ -81,7 +85,7 @@ export const DraggablePosition = ({
                 transform.y / scale.y
               }px, 0)`
             : undefined,
-          zIndex: selectedElement && selectedElement.id === id ? 100 : 0,
+          zIndex: isSelected ? 100 : 0,
         }}
         // onPointerDown={(e) => {
         //   //selectElement(canvasBlock);
@@ -99,8 +103,11 @@ export const DraggablePosition = ({
       >
         <Tags tags={canvasBlock.tags} />
         {children}
-        <TagSelector blockId={canvasBlock.id} blockTags={canvasBlock.tags} />
-        {selectedElement && selectedElement.id === id && (
+        {isSelected && (
+          <TagSelector blockId={canvasBlock.id} blockTags={canvasBlock.tags} />
+        )}
+        {isSelected && otherTools}
+        {isSelected && (
           <div
             ref={setNodeRef}
             {...listeners}
@@ -139,6 +146,7 @@ export const DraggableResizablePosition = ({
   width,
   height,
   children,
+  otherTools,
   canvasBlock,
   selectedBoxSizeAdjustment,
   ...props
@@ -156,6 +164,8 @@ export const DraggableResizablePosition = ({
 
   const selectedBoxAdjustedWidth = selectedBoxSizeAdjustment?.width || 0;
   const selectedBoxAdjustedHeight = selectedBoxSizeAdjustment?.height || 0;
+
+  const isSelected = selectedElement && selectedElement.id === id;
 
   if (
     inBounds(
@@ -176,10 +186,13 @@ export const DraggableResizablePosition = ({
           resizeBlock(canvasBlock.id, data.size.width, data.size.height);
         }}
         handle={
-          <div
-            style={{ zIndex: 100, right: -7 - selectedBoxAdjustedWidth / 2 }}
-            className="w-4 h-4 border-[2px] bg-white border-[#6A35FF] absolute bottom-[-7px] cursor-grab"
-          />
+          isSelected && (
+            <div
+              id="resize-handle"
+              style={{ zIndex: 100, right: -7 - selectedBoxAdjustedWidth / 2 }}
+              className="w-4 h-4 border-[2px] bg-white border-[#6A35FF] absolute bottom-[-7px] cursor-grab"
+            />
+          )
         }
       >
         <div
@@ -198,7 +211,7 @@ export const DraggableResizablePosition = ({
                   transform.y / scale.y
                 }px, 0)`
               : undefined,
-            zIndex: selectedElement && selectedElement.id === id ? 100 : 0,
+            zIndex: isSelected ? 100 : undefined,
           }}
           // onPointerDown={(e) => {
           //   //selectElement(canvasBlock);
@@ -216,8 +229,14 @@ export const DraggableResizablePosition = ({
         >
           <Tags tags={canvasBlock.tags} />
           {children}
-          <TagSelector blockId={canvasBlock.id} blockTags={canvasBlock.tags} />
-          {selectedElement && selectedElement.id === id && (
+          {isSelected && (
+            <TagSelector
+              blockId={canvasBlock.id}
+              blockTags={canvasBlock.tags}
+            />
+          )}
+          {isSelected && otherTools}
+          {isSelected && (
             <div
               ref={setNodeRef}
               {...listeners}

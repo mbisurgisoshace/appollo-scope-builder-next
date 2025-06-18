@@ -61,6 +61,7 @@ export default function useEditor() {
       const newItem = createBlock(id);
       newItem.top = top;
       newItem.left = left;
+      newItem.stackOrder = getNextStackOrder();
       addBlock(newItem);
     }
 
@@ -81,6 +82,7 @@ export default function useEditor() {
       const imageBlock = createImageBlock(storageId);
       imageBlock.top = top;
       imageBlock.left = left;
+      imageBlock.stackOrder = getNextStackOrder();
       const items = storage.get("items") as LiveList<CanvasBlock>;
       items.push(imageBlock);
       CanvasStore.setNewBlockCoords(0, 0);
@@ -93,6 +95,7 @@ export default function useEditor() {
       const gridBlock = createGridBLock(rows, cols);
       gridBlock.top = top;
       gridBlock.left = left;
+      gridBlock.stackOrder = getNextStackOrder();
       const items = storage.get("items") as LiveList<CanvasBlock>;
       items.push(gridBlock);
       CanvasStore.setNewBlockCoords(0, 0);
@@ -110,6 +113,7 @@ export default function useEditor() {
       const tableBlock = createTableBlock(colDefinitions);
       tableBlock.top = top;
       tableBlock.left = left;
+      tableBlock.stackOrder = getNextStackOrder();
       const items = storage.get("items") as LiveList<CanvasBlock>;
       items.push(tableBlock);
       CanvasStore.setNewBlockCoords(0, 0);
@@ -186,6 +190,28 @@ export default function useEditor() {
     }
   }, []);
 
+  const sendToBack = useMutation(({ storage }, blockId: string) => {
+    const items = storage.get("items") as LiveList<CanvasBlock>;
+    const minOrder = Math.min(...items.map((e) => e.stackOrder)) || 0;
+    const block = items.find((item) => item.id === blockId);
+    const blockIndex = items.findIndex((item) => item.id === blockId);
+    if (block) {
+      block.stackOrder = minOrder - 1;
+      items.set(blockIndex, block);
+    }
+  }, []);
+
+  const bringToFront = useMutation(({ storage }, blockId: string) => {
+    const items = storage.get("items") as LiveList<CanvasBlock>;
+    const maxOrder = Math.max(...items.map((e) => e.stackOrder)) || 0;
+    const block = items.find((item) => item.id === blockId);
+    const blockIndex = items.findIndex((item) => item.id === blockId);
+    if (block) {
+      block.stackOrder = maxOrder + 1;
+      items.set(blockIndex, block);
+    }
+  }, []);
+
   const editBlockStyle = useMutation(
     ({ storage }, blockId: string, styleProp: string, styleValue: string) => {
       const items = storage.get("items") as LiveList<CanvasBlock>;
@@ -202,6 +228,11 @@ export default function useEditor() {
     []
   );
 
+  const getNextStackOrder = (): number => {
+    if (items!.length === 0) return 0;
+    return Math.max(...items!.map((el) => el.stackOrder)) + 1;
+  };
+
   return {
     tags,
     items,
@@ -210,8 +241,10 @@ export default function useEditor() {
     tagBlock,
     setActive,
     isGridOpen,
+    sendToBack,
     isTableOpen,
     resizeBlock,
+    bringToFront,
     addGridBlock,
     addTableBlock,
     setIsGridOpen,

@@ -25,9 +25,11 @@ const InfiniteCanvas = ({}: { frame: string }) => {
         transformOrigin: "top left",
       }}
     >
-      {items?.map((item, index) => (
-        <Block key={index} canvasBlock={item} />
-      ))}
+      {items
+        ?.toSorted((a, b) => a.stackOrder - b.stackOrder)
+        .map((item, index) => (
+          <Block key={index} canvasBlock={item} />
+        ))}
       {arrows?.map((arrow) => (
         <Xarrow
           showHead

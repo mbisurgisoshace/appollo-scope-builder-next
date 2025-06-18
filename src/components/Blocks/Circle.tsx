@@ -38,6 +38,14 @@ export default function CircleBlock({ canvasBlock }: CircleProps) {
       canvasBlock={canvasBlock}
       width={canvasBlock.width}
       height={canvasBlock.height}
+      otherTools={
+        <ColorPicker
+          backgroundColor={style?.backgroundColor}
+          onChangeColor={(value) =>
+            editBlockStyle(id, "backgroundColor", value)
+          }
+        />
+      }
     >
       <div
         style={{
@@ -54,10 +62,6 @@ export default function CircleBlock({ canvasBlock }: CircleProps) {
           className="w-full h-full border-transparent shadow-none outline-none focus:ring-0 focus:border-transparent"
         />
       </div>
-      <ColorPicker
-        backgroundColor={style?.backgroundColor}
-        onChangeColor={(value) => editBlockStyle(id, "backgroundColor", value)}
-      />
     </DraggableResizablePosition>
   );
 }
