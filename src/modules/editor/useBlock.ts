@@ -50,8 +50,9 @@ export default function useBlock() {
       tags: [],
       width: 500,
       height: 500,
-      blockType: "table",
+      stackOrder: 0,
       colsDefinition,
+      blockType: "table",
       data: createTableData(colsDefinition),
     };
   }
@@ -66,6 +67,7 @@ export default function useBlock() {
       tags: [],
       width: 500,
       height: 500,
+      stackOrder: 0,
       blockType: "grid",
       data: createGridData(rows, cols),
     };
@@ -80,6 +82,7 @@ export default function useBlock() {
       storageId,
       width: 250,
       height: 250,
+      stackOrder: 0,
       blockType: "image",
     };
   }
@@ -93,6 +96,7 @@ export default function useBlock() {
       text: "",
       width: 250,
       height: 250,
+      stackOrder: 0,
       blockType: "circle",
     };
   }
@@ -106,6 +110,7 @@ export default function useBlock() {
       text: "",
       width: 250,
       height: 250,
+      stackOrder: 0,
       blockType: "square",
     };
   }
@@ -118,6 +123,7 @@ export default function useBlock() {
       left: 500,
       width: 750,
       height: 250,
+      stackOrder: 0,
       blockType: "interview",
     };
   }
