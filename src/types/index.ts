@@ -16,6 +16,14 @@ export type Arrow = {
   end: string;
   start: string;
 };
+
+export interface Group extends JsonObject {
+  id: string;
+  top: number;
+  left: number;
+  blockIds: string[];
+}
+
 export interface Block extends JsonObject {
   id: string;
   top: number;
@@ -23,6 +31,7 @@ export interface Block extends JsonObject {
   width: number;
   height: number;
   tags: string[];
+  groupId?: string;
   stackOrder: number;
   style?: Record<string, any>;
 }

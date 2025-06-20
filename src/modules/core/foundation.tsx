@@ -16,6 +16,7 @@ import {
   CircleChevronRightIcon,
   CircleChevronUpIcon,
 } from "lucide-react";
+import { useStorage } from "@liveblocks/react";
 
 export interface CanvasPosition extends React.HTMLProps<HTMLDivElement> {
   id: string;
@@ -48,6 +49,7 @@ export const DraggablePosition = ({
 }: PropsWithChildren<CanvasPosition>) => {
   const { startDrawingArrow } = useEditor();
   const scale = useCanvasStore((state) => state.scale);
+  const selectedIds = useCanvasStore((state) => state.selectedIds);
   const selectElement = useCanvasStore((state) => state.selectElement);
   const selectedElement = useCanvasStore((state) => state.selectedElement);
 
@@ -57,7 +59,8 @@ export const DraggablePosition = ({
 
   const screen = CanvasStore.screen;
 
-  const isSelected = selectedElement && selectedElement.id === id;
+  const isSelected =
+    (selectedElement && selectedElement.id === id) || selectedIds.includes(id);
 
   if (
     inBounds(
@@ -153,6 +156,7 @@ export const DraggableResizablePosition = ({
 }: PropsWithChildren<CanvasPosition>) => {
   const scale = useCanvasStore((state) => state.scale);
   const { resizeBlock, startDrawingArrow } = useEditor();
+  const selectedIds = useCanvasStore((state) => state.selectedIds);
   const selectElement = useCanvasStore((state) => state.selectElement);
   const selectedElement = useCanvasStore((state) => state.selectedElement);
 
@@ -165,7 +169,8 @@ export const DraggableResizablePosition = ({
   const selectedBoxAdjustedWidth = selectedBoxSizeAdjustment?.width || 0;
   const selectedBoxAdjustedHeight = selectedBoxSizeAdjustment?.height || 0;
 
-  const isSelected = selectedElement && selectedElement.id === id;
+  const isSelected =
+    (selectedElement && selectedElement.id === id) || selectedIds.includes(id);
 
   if (
     inBounds(
