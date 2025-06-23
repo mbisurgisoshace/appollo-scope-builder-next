@@ -5,11 +5,13 @@ import { useStorage } from "@liveblocks/react";
 import Block from "@/components/Blocks";
 import CanvasStore, { useCanvasStore } from "../state/CanvasStore";
 import { useSelectionBox } from "../core/useSelectionBox";
+import Group from "@/components/Blocks/Group";
 
 const InfiniteCanvas = ({}: { frame: string }) => {
   const scale = CanvasStore.scale;
   const screen = CanvasStore.screen;
   const items = useStorage((root) => root.items);
+  const groups = useStorage((root) => root.groups);
   const arrows = useStorage((root) => root.arrows);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const setSelectedIds = useCanvasStore((state) => state.setSelectedIds);
@@ -45,8 +47,12 @@ const InfiniteCanvas = ({}: { frame: string }) => {
         transformOrigin: "top left",
       }}
     >
+      {groups?.map((group) => (
+        <Group key={group.id} group={group} />
+      ))}
       {items
-        ?.toSorted((a, b) => a.stackOrder - b.stackOrder)
+        ?.filter((b) => !b.groupId)
+        .toSorted((a, b) => a.stackOrder - b.stackOrder)
         .map((item, index) => (
           <Block key={index} canvasBlock={item} />
         ))}

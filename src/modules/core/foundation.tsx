@@ -6,7 +6,7 @@ import { restrictToParentElement } from "@dnd-kit/modifiers";
 import { inBounds } from "./math-utils";
 
 import Tags from "@/components/Tags";
-import { CanvasBlock } from "@/types";
+import { CanvasBlock, Group } from "@/types";
 import useEditor from "../editor/useEditor";
 import TagSelector from "@/components/TagSelector";
 import CanvasStore, { useCanvasStore } from "../state/CanvasStore";
@@ -293,6 +293,47 @@ export const DraggableResizablePosition = ({
       </Resizable>
     );
   } else return null;
+};
+
+type DraggableGroupProps = Omit<Group, "blockIds">;
+
+export const DraggableGroup = ({
+  id,
+  top,
+  left,
+  children,
+}: PropsWithChildren<{ id: string; top: number; left: number }>) => {
+  const scale = useCanvasStore((state) => state.scale);
+
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id,
+    data: {
+      modifiers: [restrictToParentElement],
+    },
+  });
+
+  return (
+    <div
+      id={id}
+      {...listeners}
+      {...attributes}
+      ref={setNodeRef}
+      className="absolute"
+      style={{
+        //...style,
+        zIndex: 100,
+        top: `${top}px`,
+        left: `${left}px`,
+        transform: transform
+          ? `translate3d(${transform.x / scale.x}px, ${
+              transform.y / scale.y
+            }px, 0)`
+          : undefined,
+      }}
+    >
+      {children}
+    </div>
+  );
 };
 
 export const DraggableBlock = ({

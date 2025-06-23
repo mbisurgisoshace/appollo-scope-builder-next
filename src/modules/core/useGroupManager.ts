@@ -52,8 +52,8 @@ export function useGroupManager(
           ? {
               ...b,
               groupId: newGroupId,
-              left: b.left - minX,
-              top: b.top - minY,
+              //left: b.left - minX,
+              //top: b.top - minY,
             }
           : b
       ) || [];

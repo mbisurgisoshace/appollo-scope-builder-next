@@ -27,6 +27,7 @@ export function useSelectionBox({
   const onMouseDown = useCallback(
     (e: MouseEvent) => {
       if (e.button !== 0) return;
+      if ((e.target as HTMLElement).id === "resize-handle") return;
       const rect = containerRef.current?.getBoundingClientRect();
       if (!rect) return;
 
