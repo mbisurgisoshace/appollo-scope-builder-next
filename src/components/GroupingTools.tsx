@@ -9,8 +9,6 @@ import { useGroupManager } from "@/modules/core/useGroupManager";
 export default function GroupingTools() {
   const { groupBlocks } = useGroupManager();
   const selectedIds = useCanvasStore((state) => state.selectedIds);
-  console.log("selectedIds", selectedIds);
-  console.log("GroupingTools rendered", selectedIds.length);
 
   {
     return selectedIds.length > 0 ? (

@@ -21,6 +21,8 @@ export interface Group extends JsonObject {
   id: string;
   top: number;
   left: number;
+  width: number;
+  height: number;
   blockIds: string[];
 }
 

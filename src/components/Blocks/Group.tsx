@@ -13,12 +13,18 @@ export default function Group({ group }: GroupProps) {
   const blocks = items?.filter((item) => item.groupId === group.id) || [];
 
   return (
-    <DraggableGroup id={group.id} top={group.top} left={group.left}>
+    <DraggableGroup
+      id={group.id}
+      top={group.top}
+      left={group.left}
+      width={group.width}
+      height={group.height}
+    >
       <div className="group relative">
         {blocks
           .toSorted((a, b) => a.stackOrder - b.stackOrder)
           .map((block, index) => (
-            <Block canvasBlock={block} />
+            <Block canvasBlock={block} key={block.id} />
           ))}
       </div>
     </DraggableGroup>

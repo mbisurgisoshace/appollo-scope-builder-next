@@ -249,8 +249,10 @@ export default class CanvasStore {
 interface CanvasContextType {
   selectedIds: string[];
   unselectElement: () => void;
+  selectedGroupId: string | null;
   scale: { x: number; y: number };
   selectedElement: CanvasBlock | null;
+  selectGroup: (groupId: string) => void;
   setSelectedIds: (ids: string[]) => void;
   selectElement: (element: CanvasBlock) => void;
   setScale: (scale: { x: number; y: number }) => void;
@@ -260,8 +262,10 @@ export const useCanvasStore = create<CanvasContextType>((set) => ({
   selectedIds: [],
   scale: { x: 1, y: 1 },
   selectedElement: null,
+  selectedGroupId: null,
   setScale: (scale) => set({ scale }),
   setSelectedIds: (ids) => set({ selectedIds: ids }),
   unselectElement: () => set({ selectedElement: null }),
+  selectGroup: (groupId) => set({ selectedGroupId: groupId }),
   selectElement: (element) => set({ selectedElement: element }),
 }));

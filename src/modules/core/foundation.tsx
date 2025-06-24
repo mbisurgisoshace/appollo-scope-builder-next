@@ -209,6 +209,8 @@ export const DraggableResizablePosition = ({
           style={{
             width: `${width}px`,
             height: `${height}px`,
+            // top: `${top - screen.y}px`,
+            // left: `${left - screen.x}px`,
             top: `${top - screen.y}px`,
             left: `${left - screen.x}px`,
             transform: transform
@@ -301,9 +303,21 @@ export const DraggableGroup = ({
   id,
   top,
   left,
+  width,
+  height,
   children,
-}: PropsWithChildren<{ id: string; top: number; left: number }>) => {
+}: PropsWithChildren<{
+  id: string;
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}>) => {
   const scale = useCanvasStore((state) => state.scale);
+  const selectGroup = useCanvasStore((state) => state.selectGroup);
+  const selectedGroup = useCanvasStore((state) => state.selectedGroupId);
+
+  const screen = CanvasStore.screen;
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id,
@@ -312,28 +326,77 @@ export const DraggableGroup = ({
     },
   });
 
-  return (
-    <div
-      id={id}
-      {...listeners}
-      {...attributes}
-      ref={setNodeRef}
-      className="absolute"
-      style={{
-        //...style,
-        zIndex: 100,
-        top: `${top}px`,
-        left: `${left}px`,
-        transform: transform
-          ? `translate3d(${transform.x / scale.x}px, ${
-              transform.y / scale.y
-            }px, 0)`
-          : undefined,
-      }}
-    >
-      {children}
-    </div>
-  );
+  const selectedBoxAdjustedWidth = 0;
+  const selectedBoxAdjustedHeight = 0;
+
+  const isSelected = selectedGroup && selectedGroup === id;
+
+  if (
+    inBounds(
+      { left, top, height: 0, width: 0 },
+      {
+        left: CanvasStore.screen.x,
+        top: CanvasStore.screen.y,
+        width: CanvasStore.screen.width,
+        height: CanvasStore.screen.height,
+      }
+    )
+  )
+    return (
+      <div
+        id={id}
+        {...listeners}
+        {...attributes}
+        ref={setNodeRef}
+        className="absolute"
+        style={{
+          //...style,
+          zIndex: 100,
+          // top: `${top}px`,
+          // left: `${left}px`,
+          width: `${width - screen.x}px`,
+          height: `${height - screen.y}px`,
+          top: `${top - screen.y}px`,
+          left: `${left - screen.x}px`,
+          transform: transform
+            ? `translate3d(${transform.x / scale.x}px, ${
+                transform.y / scale.y
+              }px, 0)`
+            : undefined,
+        }}
+        onClick={() => {
+          selectGroup(id);
+        }}
+      >
+        {children}
+        {isSelected && (
+          <div
+            ref={setNodeRef}
+            {...listeners}
+            {...attributes}
+            style={{
+              top: -8,
+              left: -8,
+              width: width + 16,
+              height: height + 16,
+              position: "absolute",
+              //border: "25px solid #6A35FF",
+            }}
+            className="border-[5px] border-gray-100 cursor-grab"
+            onPointerDown={(e) => {
+              if (listeners && listeners.onPointerDown) {
+                listeners.onPointerDown(e);
+                e.preventDefault();
+                e.stopPropagation();
+              }
+            }}
+          >
+            <div className="w-full h-full border-[1.5px] border-[#6A35FF]" />
+          </div>
+        )}
+      </div>
+    );
+  else return null;
 };
 
 export const DraggableBlock = ({
