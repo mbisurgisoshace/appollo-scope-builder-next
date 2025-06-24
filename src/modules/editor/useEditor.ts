@@ -228,8 +228,18 @@ export default function useEditor() {
     []
   );
 
+  const deleteBlock = useMutation(({ storage }, blockId: string) => {
+    const items = storage.get("items") as LiveList<CanvasBlock>;
+    const block = items.find((item) => item.id === blockId);
+    if (!block) return;
+    const blockIndex = items.findIndex((item) => item.id === blockId);
+    items.delete(blockIndex);
+  }, []);
+
   const getNextStackOrder = (): number => {
-    if (items!.length === 0) return 0;
+    console.log("items", items);
+
+    if (items && items.length === 0) return 0;
     return Math.max(...items!.map((el) => el.stackOrder)) + 1;
   };
 
@@ -242,6 +252,7 @@ export default function useEditor() {
     setActive,
     isGridOpen,
     sendToBack,
+    deleteBlock,
     isTableOpen,
     resizeBlock,
     bringToFront,

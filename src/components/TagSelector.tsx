@@ -11,9 +11,11 @@ import {
 import {
   BringToFrontIcon,
   CopyIcon,
+  DeleteIcon,
   SendToBackIcon,
   SettingsIcon,
   TagsIcon,
+  Trash2Icon,
 } from "lucide-react";
 
 import useEditor from "../modules/editor/useEditor";
@@ -24,8 +26,14 @@ interface TagSelectorProps {
 }
 
 export default function TagSelector({ blockId, blockTags }: TagSelectorProps) {
-  const { tags, tagBlock, duplicateBlock, sendToBack, bringToFront } =
-    useEditor();
+  const {
+    tags,
+    tagBlock,
+    duplicateBlock,
+    sendToBack,
+    bringToFront,
+    deleteBlock,
+  } = useEditor();
   return (
     <div className="absolute top-[-35px] right-3 z-[100]">
       <DropdownMenu>
@@ -53,6 +61,13 @@ export default function TagSelector({ blockId, blockTags }: TagSelectorProps) {
           >
             <BringToFrontIcon size={18} />
             Bring to Front
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="flex items-center"
+            onClick={() => deleteBlock(blockId)}
+          >
+            <Trash2Icon size={18} />
+            Delete
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="flex items-center">
