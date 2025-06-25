@@ -354,8 +354,8 @@ export const DraggableGroup = ({
           zIndex: 100,
           // top: `${top}px`,
           // left: `${left}px`,
-          width: `${width - screen.x}px`,
-          height: `${height - screen.y}px`,
+          width: `${width}px`,
+          height: `${height}px`,
           top: `${top - screen.y}px`,
           left: `${left - screen.x}px`,
           transform: transform

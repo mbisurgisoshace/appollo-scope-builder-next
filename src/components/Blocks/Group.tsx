@@ -1,32 +1,51 @@
 import { useStorage } from "@liveblocks/react";
 
 import Block from ".";
-import { Group as GroupType } from "@/types";
-import { DraggableGroup } from "@/modules/core/foundation";
+import { GroupBlock } from "@/types";
+import { DraggableGroup, DraggablePosition } from "@/modules/core/foundation";
 
 interface GroupProps {
-  group: GroupType;
+  canvasBlock: GroupBlock;
 }
 
-export default function Group({ group }: GroupProps) {
+export default function Group({ canvasBlock }: GroupProps) {
   const items = useStorage((root) => root.items);
-  const blocks = items?.filter((item) => item.groupId === group.id) || [];
+  const blocks = items?.filter((item) => item.groupId === canvasBlock.id) || [];
 
   return (
-    <DraggableGroup
-      id={group.id}
-      top={group.top}
-      left={group.left}
-      width={group.width}
-      height={group.height}
+    <DraggablePosition
+      id={canvasBlock.id}
+      top={canvasBlock.top}
+      left={canvasBlock.left}
+      canvasBlock={canvasBlock}
+      width={canvasBlock.width}
+      height={canvasBlock.height}
     >
-      <div className="group relative">
+      <div
+        className="group relative"
+        style={{ width: canvasBlock.width, height: canvasBlock.height }}
+      >
         {blocks
           .toSorted((a, b) => a.stackOrder - b.stackOrder)
           .map((block, index) => (
             <Block canvasBlock={block} key={block.id} />
           ))}
       </div>
-    </DraggableGroup>
+    </DraggablePosition>
+    // <DraggableGroup
+    //   id={group.id}
+    //   top={group.top}
+    //   left={group.left}
+    //   width={group.width}
+    //   height={group.height}
+    // >
+    //   <div className="group relative">
+    //     {blocks
+    //       .toSorted((a, b) => a.stackOrder - b.stackOrder)
+    //       .map((block, index) => (
+    //         <Block canvasBlock={block} key={block.id} />
+    //       ))}
+    //   </div>
+    // </DraggableGroup>
   );
 }

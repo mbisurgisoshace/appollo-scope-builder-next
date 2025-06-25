@@ -48,7 +48,7 @@ const InfiniteCanvas = ({}: { frame: string }) => {
       }}
     >
       {groups?.map((group) => (
-        <Group key={group.id} group={group} />
+        <Block key={group.id} canvasBlock={group} />
       ))}
       {items
         ?.filter((b) => !b.groupId)

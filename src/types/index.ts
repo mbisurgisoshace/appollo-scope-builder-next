@@ -2,6 +2,7 @@ import type { JsonObject } from "@liveblocks/client";
 
 export type BlockType =
   | "ui-grid"
+  | "ui-group"
   | "ui-image"
   | "ui-table"
   | "ui-circle"
@@ -74,10 +75,16 @@ export interface ParallelogramBlock extends Block {
   text: string;
 }
 
+export interface GroupBlock extends Block {
+  blockType: "group";
+  blockIds: string[];
+}
+
 export type CanvasBlock =
   | GridBlock
   | ImageBlock
   | TableBlock
+  | GroupBlock
   | CircleBlock
   | SquareBlock
   | InterviewBlock

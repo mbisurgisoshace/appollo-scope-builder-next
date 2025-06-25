@@ -2,7 +2,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useStorage, useMutation } from "@liveblocks/react";
 
-import { CanvasBlock, Group } from "@/types";
+import { CanvasBlock, Group, GroupBlock } from "@/types";
 import { LiveList } from "@liveblocks/client";
 import CanvasStore from "../state/CanvasStore";
 
@@ -41,6 +41,7 @@ export function useGroupManager(
 
   const groupBlocks = useMutation(({ storage }, selectedIds: string[]) => {
     if (selectedIds.length < 2) return;
+    const screen = CanvasStore.screen;
     const items = storage.get("items") as LiveList<CanvasBlock>;
 
     const selected = items?.filter((b) => selectedIds.includes(b.id)) || [];
@@ -64,14 +65,23 @@ export function useGroupManager(
           : b
       ) || [];
 
-    const newGroup: Group = {
-      id: newGroupId,
-      blockIds: selectedIds,
+    const newGroup: GroupBlock = {
+      tags: [],
       top: minY,
       left: minX,
-      width: maxX,
-      height: maxY,
+      stackOrder: 0,
+      id: newGroupId,
+      blockType: "group",
+      blockIds: selectedIds,
+      width: maxX - screen.width,
+      height: maxY - screen.height,
     };
+
+    console.log("selected", selected);
+    console.log("newGroup", newGroup);
+    console.log("Screen", CanvasStore.screen);
+
+    return;
 
     updatedBlocks.forEach((b) => {
       const blockIndex = items.findIndex((item) => item.id === b.id);
@@ -106,16 +116,14 @@ export function useGroupManager(
 
   const moveGroup = useMutation(
     ({ storage }, groupId: string, deltaX: number, deltaY: number) => {
-      const groups = storage.get("groups") as LiveList<Group>;
-      const group = groups.find((g) => g.id === groupId);
-      if (!group) return;
-      const groupIndex = groups.findIndex((g) => g.id === groupId);
-      group.left += deltaX;
-      group.top += deltaY;
-
-      console.log("Moving group", groupId, deltaX, deltaY);
-
-      groups.set(groupIndex, group);
+      // const groups = storage.get("groups") as LiveList<Group>;
+      // const group = groups.find((g) => g.id === groupId);
+      // if (!group) return;
+      // const groupIndex = groups.findIndex((g) => g.id === groupId);
+      // group.left += deltaX;
+      // group.top += deltaY;
+      // console.log("Moving group", groupId, deltaX, deltaY);
+      // groups.set(groupIndex, group);
     },
     []
   );
