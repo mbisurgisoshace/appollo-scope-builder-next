@@ -10,10 +10,12 @@ import { LiveList } from "@liveblocks/client";
 import { api } from "../../../convex/_generated/api";
 import { Arrow, CanvasBlock, ColDefinition } from "@/types";
 import CanvasStore, { useCanvasStore } from "../state/CanvasStore";
+import { useGroupManager } from "../core/useGroupManager";
 
 export default function useEditor() {
   const tags = useQuery(api.tags.get);
 
+  const { moveGroup } = useGroupManager();
   const { createBlock, createGridBLock, createImageBlock, createTableBlock } =
     useBlock();
   const items = useStorage((root) => root.items);
@@ -63,6 +65,11 @@ export default function useEditor() {
       newItem.left = left;
       newItem.stackOrder = getNextStackOrder();
       addBlock(newItem);
+    }
+
+    if (id.includes("group")) {
+      moveGroup(id, x / scale.x, y / scale.y);
+      return;
     }
 
     if (!item) {

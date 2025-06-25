@@ -6,6 +6,7 @@ import Circle from "./Circle";
 import Interview from "./Interview";
 import { CanvasBlock } from "@/types";
 import Parallelogram from "./Parallelogram";
+import Group from "./Group";
 
 export interface BlockProps {
   canvasBlock: CanvasBlock;
@@ -14,6 +15,10 @@ export interface BlockProps {
 export default function Block({ canvasBlock }: BlockProps) {
   if (canvasBlock.blockType === "grid") {
     return <Grid canvasBlock={canvasBlock} />;
+  }
+
+  if (canvasBlock.blockType === "group") {
+    return <Group canvasBlock={canvasBlock} />;
   }
 
   if (canvasBlock.blockType === "table") {

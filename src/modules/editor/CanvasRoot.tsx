@@ -11,6 +11,7 @@ const SELECTED_IDS = ["resize-handle", "color-picker"];
 
 const CanvasRoot = () => {
   const setScale = useCanvasStore((state) => state.setScale);
+  const selectGroup = useCanvasStore((state) => state.selectGroup);
   const unselectElement = useCanvasStore((state) => state.unselectElement);
 
   const canvas = useRef<HTMLDivElement>(null);
@@ -53,6 +54,12 @@ const CanvasRoot = () => {
         onPointerMove={pointerListener}
         onPointerDown={(e) => {
           console.log("e", e);
+
+          if ((e.target as HTMLElement).id.includes("group-")) {
+            unselectElement();
+            const groupId = (e.target as HTMLElement).id;
+            selectGroup(groupId);
+          }
 
           if ((e.target as HTMLDivElement).id === "infinite-canvas")
             unselectElement();
