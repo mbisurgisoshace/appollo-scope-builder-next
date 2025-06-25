@@ -68,7 +68,8 @@ export default function useEditor() {
     }
 
     if (id.includes("group")) {
-      moveGroup(id, top, left);
+      moveGroup(id, x / scale.x, y / scale.y);
+      return;
     }
 
     if (!item) {

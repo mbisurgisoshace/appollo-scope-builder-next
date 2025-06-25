@@ -16,7 +16,6 @@ import {
   CircleChevronRightIcon,
   CircleChevronUpIcon,
 } from "lucide-react";
-import { useStorage } from "@liveblocks/react";
 
 export interface CanvasPosition extends React.HTMLProps<HTMLDivElement> {
   id: string;
@@ -75,9 +74,6 @@ export const DraggablePosition = ({
   ) {
     return (
       <div
-        // ref={setNodeRef}
-        // {...listeners}
-        // {...attributes}
         id={id}
         className="absolute inline-block draggable"
         style={{
@@ -90,15 +86,6 @@ export const DraggablePosition = ({
             : undefined,
           zIndex: isSelected ? 100 : 0,
         }}
-        // onPointerDown={(e) => {
-        //   //selectElement(canvasBlock);
-        //   console.log("e", e);
-        //   if (listeners && listeners.onPointerDown) {
-        //     listeners.onPointerDown(e);
-        //     e.preventDefault();
-        //     e.stopPropagation();
-        //   }
-        // }}
         onClick={() => {
           selectElement(canvasBlock);
         }}
@@ -121,12 +108,10 @@ export const DraggablePosition = ({
               width: width + 16,
               height: height + 16,
               position: "absolute",
-              //border: "25px solid #6A35FF",
             }}
             onDoubleClick={(e) => startDrawingArrow(id)}
             className="border-[5px] border-gray-100 cursor-grab"
             onPointerDown={(e) => {
-              //selectElement(canvasBlock);
               if (listeners && listeners.onPointerDown) {
                 listeners.onPointerDown(e);
                 e.preventDefault();
@@ -172,17 +157,7 @@ export const DraggableResizablePosition = ({
   const isSelected =
     (selectedElement && selectedElement.id === id) || selectedIds.includes(id);
 
-  if (
-    inBounds(
-      { left, top, height, width },
-      {
-        left: screen.x,
-        top: screen.y,
-        width: screen.width,
-        height: screen.height,
-      }
-    )
-  ) {
+  if (canvasBlock.groupId) {
     return (
       <Resizable
         width={width}
@@ -201,18 +176,13 @@ export const DraggableResizablePosition = ({
         }
       >
         <div
-          // ref={setNodeRef}
-          // {...listeners}
-          // {...attributes}
           id={id}
           className="absolute inline-block draggable"
           style={{
             width: `${width}px`,
             height: `${height}px`,
-            // top: `${top - screen.y}px`,
-            // left: `${left - screen.x}px`,
-            top: `${top - screen.y}px`,
-            left: `${left - screen.x}px`,
+            top: `${top - (canvasBlock.groupId ? 0 : screen.y)}px`,
+            left: `${left - (canvasBlock.groupId ? 0 : screen.x)}px`,
             transform: transform
               ? `translate3d(${transform.x / scale.x}px, ${
                   transform.y / scale.y
@@ -220,15 +190,6 @@ export const DraggableResizablePosition = ({
               : undefined,
             zIndex: isSelected ? 100 : undefined,
           }}
-          // onPointerDown={(e) => {
-          //   //selectElement(canvasBlock);
-          //   console.log("e", e);
-          //   if (listeners && listeners.onPointerDown) {
-          //     listeners.onPointerDown(e);
-          //     e.preventDefault();
-          //     e.stopPropagation();
-          //   }
-          // }}
           onClick={() => {
             selectElement(canvasBlock);
           }}
@@ -259,12 +220,110 @@ export const DraggableResizablePosition = ({
               onDoubleClick={(e) => startDrawingArrow(id)}
               className="border-[5px] border-gray-100 cursor-grab"
               onPointerDown={(e) => {
-                //selectElement(canvasBlock);
-                // if (arrowsDirections.includes((e.target as any).id)) {
-                //   e.preventDefault();
-                //   e.stopPropagation();
-                // }
+                if (listeners && listeners.onPointerDown) {
+                  listeners.onPointerDown(e);
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
+            >
+              <div className="w-full h-full border-[1.5px] border-[#6A35FF]" />
+              <CircleChevronUpIcon
+                id="arrow-up"
+                className="absolute left-1/2 -top-8  -translate-x-1/2"
+              />
+              <CircleChevronLeftIcon
+                id="arrow-left"
+                className="absolute top-1/2 -left-7 -translate-y-1/2"
+              />
+              <CircleChevronDownIcon
+                id="arrow-down"
+                className="absolute left-1/2 -bottom-8  -translate-x-1/2"
+              />
+              <CircleChevronRightIcon
+                id="arrow-right"
+                className="absolute top-1/2 -right-7 -translate-y-1/2"
+              />
+            </div>
+          )}
+        </div>
+      </Resizable>
+    );
+  }
 
+  if (
+    inBounds(
+      { left, top, height, width },
+      {
+        left: screen.x,
+        top: screen.y,
+        width: screen.width,
+        height: screen.height,
+      }
+    )
+  ) {
+    return (
+      <Resizable
+        width={width}
+        height={height}
+        onResize={(_, data) => {
+          resizeBlock(canvasBlock.id, data.size.width, data.size.height);
+        }}
+        handle={
+          isSelected && (
+            <div
+              id="resize-handle"
+              style={{ zIndex: 100, right: -7 - selectedBoxAdjustedWidth / 2 }}
+              className="w-4 h-4 border-[2px] bg-white border-[#6A35FF] absolute bottom-[-7px] cursor-grab"
+            />
+          )
+        }
+      >
+        <div
+          id={id}
+          className="absolute inline-block draggable"
+          style={{
+            width: `${width}px`,
+            height: `${height}px`,
+            top: `${top - (canvasBlock.groupId ? 0 : screen.y)}px`,
+            left: `${left - (canvasBlock.groupId ? 0 : screen.x)}px`,
+            transform: transform
+              ? `translate3d(${transform.x / scale.x}px, ${
+                  transform.y / scale.y
+                }px, 0)`
+              : undefined,
+            zIndex: isSelected ? 100 : undefined,
+          }}
+          onClick={() => {
+            selectElement(canvasBlock);
+          }}
+          onDoubleClick={props.onDoubleClick}
+        >
+          <Tags tags={canvasBlock.tags} />
+          {children}
+          {isSelected && (
+            <TagSelector
+              blockId={canvasBlock.id}
+              blockTags={canvasBlock.tags}
+            />
+          )}
+          {isSelected && otherTools}
+          {isSelected && (
+            <div
+              ref={setNodeRef}
+              {...listeners}
+              {...attributes}
+              style={{
+                top: -8,
+                left: -8 - selectedBoxAdjustedWidth / 2,
+                position: "absolute",
+                width: width + 16 + selectedBoxAdjustedWidth,
+                height: height + 16 + selectedBoxAdjustedHeight,
+                //border: "25px solid #6A35FF",
+              }}
+              onDoubleClick={(e) => startDrawingArrow(id)}
+              className="border-[5px] border-gray-100 cursor-grab"
+              onPointerDown={(e) => {
                 if (listeners && listeners.onPointerDown) {
                   listeners.onPointerDown(e);
                   e.preventDefault();
@@ -350,10 +409,7 @@ export const DraggableGroup = ({
         ref={setNodeRef}
         className="absolute"
         style={{
-          //...style,
           zIndex: 100,
-          // top: `${top}px`,
-          // left: `${left}px`,
           width: `${width}px`,
           height: `${height}px`,
           top: `${top - screen.y}px`,
@@ -380,7 +436,6 @@ export const DraggableGroup = ({
               width: width + 16,
               height: height + 16,
               position: "absolute",
-              //border: "25px solid #6A35FF",
             }}
             className="border-[5px] border-gray-100 cursor-grab"
             onPointerDown={(e) => {
@@ -408,7 +463,6 @@ export const DraggableBlock = ({
   children,
 }: PropsWithChildren<CanvasPosition>) => {
   const scale = useCanvasStore((state) => state.scale);
-  //const selectElement = useCanvasStore((state) => state.selectElement);
   const selectedElement = useCanvasStore((state) => state.selectedElement);
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -437,8 +491,6 @@ export const DraggableBlock = ({
           : undefined,
       }}
       onPointerDown={(e) => {
-        //selectElement(canvasBlock);
-
         if (listeners && listeners.onPointerDown) {
           listeners.onPointerDown(e);
           e.preventDefault();

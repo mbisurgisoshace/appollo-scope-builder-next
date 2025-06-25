@@ -73,15 +73,9 @@ export function useGroupManager(
       id: newGroupId,
       blockType: "group",
       blockIds: selectedIds,
-      width: maxX - screen.width,
-      height: maxY - screen.height,
+      width: maxX - minX,
+      height: maxY - minY,
     };
-
-    console.log("selected", selected);
-    console.log("newGroup", newGroup);
-    console.log("Screen", CanvasStore.screen);
-
-    return;
 
     updatedBlocks.forEach((b) => {
       const blockIndex = items.findIndex((item) => item.id === b.id);
@@ -116,14 +110,25 @@ export function useGroupManager(
 
   const moveGroup = useMutation(
     ({ storage }, groupId: string, deltaX: number, deltaY: number) => {
-      // const groups = storage.get("groups") as LiveList<Group>;
-      // const group = groups.find((g) => g.id === groupId);
-      // if (!group) return;
-      // const groupIndex = groups.findIndex((g) => g.id === groupId);
-      // group.left += deltaX;
-      // group.top += deltaY;
-      // console.log("Moving group", groupId, deltaX, deltaY);
-      // groups.set(groupIndex, group);
+      const items = storage.get("items") as LiveList<CanvasBlock>;
+      const groupedItems = items.filter((item) => item.groupId === groupId);
+      const groups = storage.get("groups") as LiveList<Group>;
+      const group = groups.find((g) => g.id === groupId);
+
+      if (!group) return;
+
+      const groupIndex = groups.findIndex((g) => g.id === groupId);
+      group.left += deltaX;
+      group.top += deltaY;
+      groups.set(groupIndex, group);
+
+      items.forEach((item, index) => {
+        if (item.groupId === groupId) {
+          item.left += deltaX;
+          item.top += deltaY;
+          items.set(index, item);
+        }
+      });
     },
     []
   );

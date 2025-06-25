@@ -10,7 +10,15 @@ interface GroupProps {
 
 export default function Group({ canvasBlock }: GroupProps) {
   const items = useStorage((root) => root.items);
-  const blocks = items?.filter((item) => item.groupId === canvasBlock.id) || [];
+
+  const blocks =
+    items
+      ?.filter((item) => item.groupId === canvasBlock.id)
+      .map((block) => ({
+        ...block,
+        top: block.top - canvasBlock.top,
+        left: block.left - canvasBlock.left,
+      })) || [];
 
   return (
     <DraggablePosition
@@ -27,25 +35,10 @@ export default function Group({ canvasBlock }: GroupProps) {
       >
         {blocks
           .toSorted((a, b) => a.stackOrder - b.stackOrder)
-          .map((block, index) => (
-            <Block canvasBlock={block} key={block.id} />
-          ))}
+          .map((block, index) => {
+            return <Block canvasBlock={block} key={block.id} />;
+          })}
       </div>
     </DraggablePosition>
-    // <DraggableGroup
-    //   id={group.id}
-    //   top={group.top}
-    //   left={group.left}
-    //   width={group.width}
-    //   height={group.height}
-    // >
-    //   <div className="group relative">
-    //     {blocks
-    //       .toSorted((a, b) => a.stackOrder - b.stackOrder)
-    //       .map((block, index) => (
-    //         <Block canvasBlock={block} key={block.id} />
-    //       ))}
-    //   </div>
-    // </DraggableGroup>
   );
 }
