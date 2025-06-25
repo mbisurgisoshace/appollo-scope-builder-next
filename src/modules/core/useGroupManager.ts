@@ -12,32 +12,6 @@ export function useGroupManager(
 ) {
   const blocks = useStorage((root) => root.items);
   const groups = useStorage((root) => root.groups);
-  //   const [_, setGroups] = useState<Group[]>(initialGroups);
-  //   const [_, setBlocks] = useState<CanvasBlock[]>(initialBlocks);
-
-  //   const groupBlocks = (selectedIds: string[]) => {
-  //     if (selectedIds.length < 2) return;
-  //     const selected = blocks?.filter((b) => selectedIds.includes(b.id)) || [];
-  //     const minX = Math.min(...selected.map((b) => b.left));
-  //     const minY = Math.min(...selected.map((b) => b.top));
-  //     const newGroupId = `group-${uuidv4()}`;
-
-  //     const updatedBlocks = blocks?.map((b) =>
-  //       selectedIds.includes(b.id)
-  //         ? { ...b, groupId: newGroupId, left: b.left - minX, top: b.top - minY }
-  //         : b
-  //     ) || [];
-
-  //     const newGroup: Group = {
-  //       id: newGroupId,
-  //       blockIds: selectedIds,
-  //       left: minX,
-  //       top: minY,
-  //     };
-
-  //     setBlocks(updatedBlocks);
-  //     setGroups((prev) => [...prev, newGroup]);
-  //   };
 
   const groupBlocks = useMutation(({ storage }, selectedIds: string[]) => {
     if (selectedIds.length < 2) return;
@@ -87,31 +61,26 @@ export function useGroupManager(
     storage.get("groups").push(newGroup);
   }, []);
 
-  const ungroup = (groupId: string) => {
-    const group = groups?.find((g) => g.id === groupId);
+  const ungroup = useMutation(({ storage }, groupId: string) => {
+    const groups = storage.get("groups") as LiveList<Group>;
+    const group = groups.find((g) => g.id === groupId);
+    const groupIndex = groups?.findIndex((g) => g.id === groupId);
+    const items = storage.get("items") as LiveList<CanvasBlock>;
     if (!group) return;
 
-    const updatedBlocks =
-      blocks?.map((b) => {
-        if (b.groupId === groupId) {
-          return {
-            ...b,
-            groupId: undefined,
-            left: b.left + group.left,
-            top: b.top + group.top,
-          };
-        }
-        return b;
-      }) || [];
+    items.forEach((item, index) => {
+      if (item.groupId === groupId) {
+        item.groupId = "";
+        items.set(index, item);
+      }
+    });
 
-    // setBlocks(updatedBlocks);
-    // setGroups((prev) => prev.filter((g) => g.id !== groupId));
-  };
+    groups.delete(groupIndex);
+  }, []);
 
   const moveGroup = useMutation(
     ({ storage }, groupId: string, deltaX: number, deltaY: number) => {
       const items = storage.get("items") as LiveList<CanvasBlock>;
-      const groupedItems = items.filter((item) => item.groupId === groupId);
       const groups = storage.get("groups") as LiveList<Group>;
       const group = groups.find((g) => g.id === groupId);
 
@@ -137,8 +106,6 @@ export function useGroupManager(
     groups,
     blocks,
     ungroup,
-    //setBlocks,
-    //setGroups,
     moveGroup,
     groupBlocks,
   };
