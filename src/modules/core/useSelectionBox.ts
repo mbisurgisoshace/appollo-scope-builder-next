@@ -85,6 +85,8 @@ export function useSelectionBox({
       )
       .map(([id]) => id);
 
+    console.log("selected elements:", selected);
+
     onSelect(selected);
     setBox(null);
     setIsDragging(false);

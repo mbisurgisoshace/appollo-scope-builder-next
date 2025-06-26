@@ -15,7 +15,7 @@ export function useGroupManager(
 
   const groupBlocks = useMutation(({ storage }, selectedIds: string[]) => {
     if (selectedIds.length < 2) return;
-    const screen = CanvasStore.screen;
+
     const items = storage.get("items") as LiveList<CanvasBlock>;
 
     const selected = items?.filter((b) => selectedIds.includes(b.id)) || [];
@@ -33,8 +33,6 @@ export function useGroupManager(
           ? {
               ...b,
               groupId: newGroupId,
-              //left: b.left - minX,
-              //top: b.top - minY,
             }
           : b
       ) || [];

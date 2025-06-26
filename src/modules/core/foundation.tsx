@@ -112,7 +112,11 @@ export const DraggablePosition = ({
             onDoubleClick={(e) => startDrawingArrow(id)}
             className="border-[5px] border-gray-100 cursor-grab"
             onPointerDown={(e) => {
-              if (listeners && listeners.onPointerDown) {
+              if (
+                listeners &&
+                listeners.onPointerDown &&
+                !canvasBlock.groupId
+              ) {
                 listeners.onPointerDown(e);
                 e.preventDefault();
                 e.stopPropagation();
@@ -220,7 +224,11 @@ export const DraggableResizablePosition = ({
               onDoubleClick={(e) => startDrawingArrow(id)}
               className="border-[5px] border-gray-100 cursor-grab"
               onPointerDown={(e) => {
-                if (listeners && listeners.onPointerDown) {
+                if (
+                  listeners &&
+                  listeners.onPointerDown &&
+                  !canvasBlock.groupId
+                ) {
                   listeners.onPointerDown(e);
                   e.preventDefault();
                   e.stopPropagation();
