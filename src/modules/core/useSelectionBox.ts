@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import CanvasStore, { useCanvasStore } from "../state/CanvasStore";
 
 interface Point {
   x: number;
@@ -21,8 +22,10 @@ export function useSelectionBox({
   getElementRects,
   onSelect,
 }: UseSelectionBoxProps) {
-  const [box, setBox] = useState<SelectionBox | null>(null);
+  const screen = CanvasStore.screen;
   const [isDragging, setIsDragging] = useState(false);
+  const scale = useCanvasStore((state) => state.scale);
+  const [box, setBox] = useState<SelectionBox | null>(null);
 
   const onMouseDown = useCallback(
     (e: MouseEvent) => {
@@ -32,8 +35,8 @@ export function useSelectionBox({
       if (!rect) return;
 
       const start = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
+        x: (e.clientX - rect.left) / scale.x,
+        y: (e.clientY - rect.top) / scale.y,
       };
 
       setBox({ start, end: start });
@@ -53,8 +56,8 @@ export function useSelectionBox({
           prev && {
             ...prev,
             end: {
-              x: e.clientX - rect.left,
-              y: e.clientY - rect.top,
+              x: (e.clientX - rect.left) / scale.x,
+              y: (e.clientY - rect.top) / scale.y,
             },
           }
       );
@@ -84,8 +87,6 @@ export function useSelectionBox({
           rect.top < selectionRect.bottom
       )
       .map(([id]) => id);
-
-    console.log("selected elements:", selected);
 
     onSelect(selected);
     setBox(null);
