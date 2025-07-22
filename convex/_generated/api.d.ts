@@ -13,6 +13,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as boards from "../boards.js";
 import type * as tags from "../tags.js";
 import type * as upload from "../upload.js";
 
@@ -25,6 +26,7 @@ import type * as upload from "../upload.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  boards: typeof boards;
   tags: typeof tags;
   upload: typeof upload;
 }>;

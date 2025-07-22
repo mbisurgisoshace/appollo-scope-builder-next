@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { ContentState, EditorState, convertToRaw } from "draft-js";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
+import { Button } from "../ui/button";
 import { CanvasBlock, InterviewBlock } from "@/types";
 import useEditor from "../../modules/editor/useEditor";
 import { DraggablePosition } from "../../modules/core/foundation";
@@ -17,10 +18,11 @@ export interface InterviewProps {
 
 export default function Interview({ canvasBlock }: InterviewProps) {
   const { tags } = useEditor();
+  const [isEditMode, setIsEditMode] = useState(false);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   useEffect(() => {
-    if (canvasBlock.parsedContent) {
+    if (ref.current && canvasBlock.parsedContent) {
       const blocksFromHtml = htmlToDraft(canvasBlock.parsedContent);
       const { contentBlocks, entityMap } = blocksFromHtml;
       const contentState = ContentState.createFromBlockArray(
@@ -108,9 +110,21 @@ export default function Interview({ canvasBlock }: InterviewProps) {
         }}
         className={`bg-white rounded-xl shadow-2xl relative`}
       >
+        <Button
+          size={"sm"}
+          className="mb-1 z-50"
+          onClick={() => setIsEditMode(!isEditMode)}
+        >
+          {isEditMode ? "Edit Mode" : "View Mode"}
+        </Button>
         <Editor
           editorState={editorState}
-          onEditorStateChange={onEditorStateChange}
+          toolbarHidden={!isEditMode}
+          onEditorStateChange={(editorState) => {
+            if (isEditMode) {
+              onEditorStateChange(editorState);
+            }
+          }}
           wrapperStyle={{
             zIndex: 100,
             //   minWidth: 400,

@@ -5,4 +5,7 @@ export default defineSchema({
   tags: defineTable({
     name: v.string(),
   }),
+  boards: defineTable({
+    name: v.string(),
+  }),
 });

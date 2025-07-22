@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
+import { fetchMutation } from "convex/nextjs";
+import { api } from "../../../convex/_generated/api";
 
 export default async function Home({
   params,
@@ -9,7 +11,12 @@ export default async function Home({
 }) {
   const { id } = await params;
 
-  if (!id) redirect(`/${uuidv4()}`);
+  if (!id) {
+    const boardId = await fetchMutation(api.boards.createBoard, {
+      name: "Another New Board",
+    });
+    redirect(`/${boardId}`);
+  }
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
