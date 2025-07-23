@@ -25,6 +25,7 @@ export default function useEditor() {
   const [arrows, setArrows] = useState<any[]>([]);
   const [isGridOpen, setIsGridOpen] = useState(false);
   const [isTableOpen, setIsTableOpen] = useState(false);
+  const [filterTags, setFilterTags] = useState<string[]>([]);
   const [isUploadImageOpen, setIsUploadImageOpen] = useState(false);
 
   const handleDragEnd = (event: any) => {
@@ -249,10 +250,12 @@ export default function useEditor() {
     setActive,
     isGridOpen,
     sendToBack,
+    filterTags,
     isTableOpen,
     resizeBlock,
     bringToFront,
     addGridBlock,
+    setFilterTags,
     addTableBlock,
     setIsGridOpen,
     handleDragEnd,

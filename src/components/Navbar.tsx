@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { UserButton } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
 import { useMutation, useQuery } from "convex/react";
@@ -18,6 +18,10 @@ export function Navbar() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(board?.name || "");
+
+  useEffect(() => {
+    setName(board?.name || "");
+  }, [board]);
 
   const onUpdateBoardName = async () => {
     if (!board) return;

@@ -15,10 +15,23 @@ import { Button } from "./ui/button";
 import { api } from "../../convex/_generated/api";
 import useEditor from "../modules/editor/useEditor";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { useCanvasStore } from "@/modules/state/CanvasStore";
 
 export default function TagCreator() {
   const { tags } = useEditor();
   const mutation = useMutation(api.tags.createTask);
+  const filterTags = useCanvasStore((state) => state.filterTags);
+  const setFilterTags = useCanvasStore((state) => state.setFilterTags);
 
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -33,8 +46,8 @@ export default function TagCreator() {
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger asChild>
         <Button
           role="combobox"
           variant="outline"
@@ -44,8 +57,46 @@ export default function TagCreator() {
           <TagsIcon />
           <span>Tags</span>
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-[200px]">
+        <DropdownMenuLabel>Filter by Tags</DropdownMenuLabel>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>Apply Filter</DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className="p-0">
+            <Command>
+              <CommandInput placeholder="Search tags..." className="h-9" />
+              <CommandList>
+                <CommandGroup>
+                  {tags?.map((tag) => (
+                    <CommandItem
+                      key={tag._id}
+                      value={tag.name}
+                      onSelect={() => {
+                        if (filterTags.includes(tag.name)) {
+                          setFilterTags(
+                            filterTags.filter((t) => t !== tag.name)
+                          );
+                        } else {
+                          setFilterTags([...filterTags, tag.name]);
+                        }
+                      }}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <span>{tag.name}</span>
+                        {filterTags.includes(tag.name) && (
+                          <span className="ml-2 text-xs text-green-500">✓</span>
+                        )}
+                      </div>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+
+        <DropdownMenuSeparator />
+
         <Command>
           <CommandInput
             value={search}
@@ -80,7 +131,7 @@ export default function TagCreator() {
             </CommandGroup>
           </CommandList>
         </Command>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

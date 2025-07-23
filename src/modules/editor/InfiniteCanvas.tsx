@@ -6,6 +6,7 @@ import Block from "@/components/Blocks";
 import CanvasStore, { useCanvasStore } from "../state/CanvasStore";
 import { useSelectionBox } from "../core/useSelectionBox";
 import Group from "@/components/Blocks/Group";
+import useEditor from "./useEditor";
 
 const InfiniteCanvas = ({}: { frame: string }) => {
   const scale = CanvasStore.scale;
@@ -14,6 +15,7 @@ const InfiniteCanvas = ({}: { frame: string }) => {
   const groups = useStorage((root) => root.groups);
   const arrows = useStorage((root) => root.arrows);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const filterTags = useCanvasStore((state) => state.filterTags);
   const setSelectedIds = useCanvasStore((state) => state.setSelectedIds);
 
   const startArrowNode = CanvasStore.getStartArrowNode();
@@ -51,7 +53,11 @@ const InfiniteCanvas = ({}: { frame: string }) => {
         <Block key={group.id} canvasBlock={group} />
       ))}
       {items
-        ?.filter((b) => !b.groupId)
+        ?.filter((b) => {
+          if (filterTags.length === 0) return true;
+          return filterTags.some((tag) => b.tags?.includes(tag));
+        })
+        .filter((b) => !b.groupId)
         .toSorted((a, b) => a.stackOrder - b.stackOrder)
         .map((item, index) => (
           <Block key={index} canvasBlock={item} />

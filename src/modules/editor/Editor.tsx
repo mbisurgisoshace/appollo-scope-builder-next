@@ -32,7 +32,7 @@ const Editor = () => {
   }, []);
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full relative bg-[#E1E9F2]">
       <DndContext
         id="editor"
         onDragMove={(e) => {
