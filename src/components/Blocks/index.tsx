@@ -3,6 +3,7 @@ import Image from "./Image";
 import Table from "./Table";
 import Square from "./Square";
 import Circle from "./Circle";
+// import Interview from "./Interview.old";
 import Interview from "./Interview";
 import { CanvasBlock } from "@/types";
 import Parallelogram from "./Parallelogram";
