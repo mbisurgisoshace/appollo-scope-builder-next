@@ -3,8 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import { fetchMutation } from "convex/nextjs";
 import { redirect } from "next/navigation";
 import { api } from "../../../convex/_generated/api";
-import { fetchMutation } from "convex/nextjs";
-import { api } from "../../../convex/_generated/api";
 
 export default async function Home({
   params,

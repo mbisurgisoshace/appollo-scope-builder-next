@@ -121,7 +121,7 @@ export default function useBlock() {
       top: 500,
       tags: [],
       left: 500,
-      width: 750,
+      width: 980,
       height: 250,
       stackOrder: 0,
       blockType: "interview",

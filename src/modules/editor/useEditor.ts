@@ -260,11 +260,7 @@ export default function useEditor() {
     setActive,
     isGridOpen,
     sendToBack,
-<<<<<<< HEAD
-    deleteBlock,
-=======
     filterTags,
->>>>>>> d6119d14c51334ca1d5d1c4a1dacf0102e8eee28
     isTableOpen,
     resizeBlock,
     bringToFront,

@@ -7,3 +7,21 @@
     transform: skew(-20deg);
     justify-content: center;
 }
+
+.tab {
+    clip-path: polygon(0% 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, 0% 100%);
+    /* border: 2px solid white; */
+    border-radius: 8px 8px 0 0;
+    border-bottom: none;
+    width: 200px;
+    z-index: 1;
+}
+
+.tab-wrapper {
+    padding: 2px; /* grosor del borde */
+    padding-bottom: 0;
+    display: inline-block;
+  background: white;
+  clip-path: polygon(0% 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, 0% 100%);
+  border-top-left-radius: 8px;
+}

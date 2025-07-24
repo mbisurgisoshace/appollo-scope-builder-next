@@ -41,10 +41,6 @@ const CanvasRoot = () => {
     CanvasStore.movePointer(event.clientX, event.clientY);
   };
 
-  // const onKeyDownListener = (event: KeyboardEvent) => {
-  //   console.log("Key pressed:", event.key);
-  // };
-
   return (
     <div className="w-full h-full">
       <div
@@ -53,8 +49,6 @@ const CanvasRoot = () => {
         //onKeyDown={onKeyDownListener}
         onPointerMove={pointerListener}
         onPointerDown={(e) => {
-          console.log("e", e);
-
           if ((e.target as HTMLElement).id.includes("group-")) {
             unselectElement();
             const groupId = (e.target as HTMLElement).id;
