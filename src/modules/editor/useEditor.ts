@@ -263,6 +263,7 @@ export default function useEditor() {
     filterTags,
     isTableOpen,
     resizeBlock,
+    deleteBlock,
     bringToFront,
     addGridBlock,
     setFilterTags,
