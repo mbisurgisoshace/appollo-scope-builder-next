@@ -1,5 +1,6 @@
 import {
   Fragment,
+  KeyboardEvent,
   ReactNode,
   useCallback,
   useEffect,
@@ -229,7 +230,7 @@ export default function TextBlock({ canvasBlock }: TextProps) {
                   {chars.map((char, i) => (
                     <div
                       key={char}
-                      onClick={(e: MouseEvent) => {
+                      onClick={() => {
                         Transforms.select(editor, target);
                         insertMention(editor, char);
                         setTarget(null);
