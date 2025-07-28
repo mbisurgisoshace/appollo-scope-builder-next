@@ -312,9 +312,11 @@ const Element = (props: RenderElementProps) => {
       return (
         <Mention
           attributes={attributes}
-          children={children}
+          //children={children}
           element={element}
-        />
+        >
+          {children}
+        </Mention>
       );
     default:
       return <p {...attributes}>{children}</p>;
