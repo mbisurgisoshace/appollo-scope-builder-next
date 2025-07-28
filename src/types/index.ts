@@ -42,7 +42,7 @@ export interface Block extends JsonObject {
 
 export interface TextBlock extends Block {
   blockType: "text";
-  text: string;
+  parsedContent?: string;
 }
 
 export interface CircleBlock extends Block {
