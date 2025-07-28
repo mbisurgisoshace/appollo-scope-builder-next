@@ -309,7 +309,13 @@ const Element = (props: RenderElementProps) => {
   const { attributes, children, element } = props;
   switch (element.type) {
     case "mention":
-      return <Mention {...props} />;
+      return (
+        <Mention
+          attributes={attributes}
+          children={children}
+          element={element}
+        />
+      );
     default:
       return <p {...attributes}>{children}</p>;
   }
