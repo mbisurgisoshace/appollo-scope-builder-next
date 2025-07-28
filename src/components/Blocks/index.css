@@ -25,3 +25,40 @@
   clip-path: polygon(0% 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, 0% 100%);
   border-top-left-radius: 8px;
 }
+
+.editor {
+  border: 1px solid #ccc;
+  padding: 8px;
+  min-height: 100px;
+  border-radius: 4px;
+  font-family: sans-serif;
+  white-space: pre-wrap;
+}
+
+.mention {
+  background-color: #e0f7fa;
+  color: #00796b;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.suggestion-list {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 4px;
+  margin: 4px 0 0 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.suggestion-list li {
+  padding: 4px;
+  cursor: pointer;
+}
+
+.suggestion-list li:hover {
+  background-color: #eee;
+}

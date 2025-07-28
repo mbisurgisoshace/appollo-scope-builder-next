@@ -245,8 +245,6 @@ export default function useEditor() {
   }, []);
 
   const getNextStackOrder = (): number => {
-    console.log("items", items);
-
     if (items && items.length === 0) return 0;
     return Math.max(...items!.map((el) => el.stackOrder)) + 1;
   };

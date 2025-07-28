@@ -2,6 +2,7 @@ import type { JsonObject } from "@liveblocks/client";
 
 export type BlockType =
   | "ui-grid"
+  | "ui-text"
   | "ui-group"
   | "ui-image"
   | "ui-table"
@@ -37,6 +38,11 @@ export interface Block extends JsonObject {
   groupId?: string;
   stackOrder: number;
   style?: Record<string, any>;
+}
+
+export interface TextBlock extends Block {
+  blockType: "text";
+  text: string;
 }
 
 export interface CircleBlock extends Block {
@@ -82,6 +88,7 @@ export interface GroupBlock extends Block {
 
 export type CanvasBlock =
   | GridBlock
+  | TextBlock
   | ImageBlock
   | TableBlock
   | GroupBlock

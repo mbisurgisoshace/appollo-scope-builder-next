@@ -11,10 +11,12 @@ import {
   ColDefinition,
   InterviewBlock,
   ParallelogramBlock,
+  TextBlock,
 } from "@/types";
 
 export default function useBlock() {
   const createBlock = (blockType: BlockType): CanvasBlock => {
+    if (blockType === "ui-text") return createTextBlock();
     if (blockType === "ui-circle") return createCircleBlock();
     if (blockType === "ui-square") return createSquareBlock();
     if (blockType === "ui-interview") return createInterviewBlock();
@@ -125,6 +127,20 @@ export default function useBlock() {
       height: 250,
       stackOrder: 0,
       blockType: "interview",
+    };
+  }
+
+  function createTextBlock(): TextBlock {
+    return {
+      id: `text-${uuidv4()}`,
+      top: 0,
+      left: 0,
+      tags: [],
+      text: "Text",
+      width: 250,
+      height: 45,
+      stackOrder: 0,
+      blockType: "text",
     };
   }
 

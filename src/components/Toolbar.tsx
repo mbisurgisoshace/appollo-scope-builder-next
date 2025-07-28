@@ -5,6 +5,7 @@ import {
   Grid3X3Icon,
   SquareIcon,
   CircleIcon,
+  UserPenIcon,
 } from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
 
@@ -42,10 +43,16 @@ function ToolbarDraggable({
 export default function Toolbar() {
   return (
     <div className="absolute bottom-12 left-1/2 translate-x-[-50%] border gap-15 py-2 px-5 bg-white z-50 flex items-center">
-      <ToolbarDraggable id="ui-interview">
+      <ToolbarDraggable id="ui-text">
         <div className="flex flex-col items-center">
           <TypeIcon />
           <span>Text</span>
+        </div>
+      </ToolbarDraggable>
+      <ToolbarDraggable id="ui-interview">
+        <div className="flex flex-col items-center">
+          <UserPenIcon />
+          <span>Interview</span>
         </div>
       </ToolbarDraggable>
       <ToolbarDraggable id="ui-grid">

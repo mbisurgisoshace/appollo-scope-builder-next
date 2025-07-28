@@ -1,13 +1,14 @@
+import Text from "./Text";
 import Grid from "./Grid";
 import Image from "./Image";
+import Group from "./Group";
 import Table from "./Table";
 import Square from "./Square";
 import Circle from "./Circle";
-// import Interview from "./Interview.old";
 import Interview from "./Interview";
-import { CanvasBlock } from "@/types";
 import Parallelogram from "./Parallelogram";
-import Group from "./Group";
+
+import { CanvasBlock } from "@/types";
 
 export interface BlockProps {
   canvasBlock: CanvasBlock;
@@ -16,6 +17,10 @@ export interface BlockProps {
 export default function Block({ canvasBlock }: BlockProps) {
   if (canvasBlock.blockType === "grid") {
     return <Grid canvasBlock={canvasBlock} />;
+  }
+
+  if (canvasBlock.blockType === "text") {
+    return <Text canvasBlock={canvasBlock} />;
   }
 
   if (canvasBlock.blockType === "group") {

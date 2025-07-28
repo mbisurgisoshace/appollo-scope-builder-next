@@ -32,12 +32,12 @@ const InfiniteCanvas = ({}: { frame: string }) => {
     return rects;
   };
 
-  const { selectionBox } = useSelectionBox({
-    //@ts-ignore
-    containerRef,
-    getElementRects: getRects,
-    onSelect: setSelectedIds,
-  });
+  // const { selectionBox } = useSelectionBox({
+  //   //@ts-ignore
+  //   containerRef,
+  //   getElementRects: getRects,
+  //   onSelect: setSelectedIds,
+  // });
 
   return (
     <div
@@ -49,15 +49,15 @@ const InfiniteCanvas = ({}: { frame: string }) => {
         transformOrigin: "top left",
       }}
     >
-      {groups?.map((group) => (
+      {/* {groups?.map((group) => (
         <Block key={group.id} canvasBlock={group} />
-      ))}
+      ))} */}
       {items
         ?.filter((b) => {
           if (filterTags.length === 0) return true;
           return filterTags.some((tag) => b.tags?.includes(tag));
         })
-        .filter((b) => !b.groupId)
+        //.filter((b) => !b.groupId)
         .toSorted((a, b) => a.stackOrder - b.stackOrder)
         .map((item, index) => (
           <Block key={index} canvasBlock={item} />
@@ -90,12 +90,12 @@ const InfiniteCanvas = ({}: { frame: string }) => {
           />
         </>
       )}
-      {selectionBox && (
+      {/* {selectionBox && (
         <div
           className="absolute border border-blue-400 bg-blue-200/20 pointer-events-none z-50"
           style={selectionBox}
         />
-      )}
+      )} */}
     </div>
   );
 };
