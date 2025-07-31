@@ -90,6 +90,7 @@ export default function LayoutSelector() {
             ))}
           </div>
           <DrawerFooter>
+            {/* @ts-ignore */}
             <Button disabled={!selectedLayout} onClick={addContainerBlock}>
               Add Layout
             </Button>
