@@ -1,5 +1,10 @@
 import type { JsonObject } from "@liveblocks/client";
 
+export type NewContainerSetup = {
+  overId: string;
+  gridColumnLayout: string;
+};
+
 export type BlockType =
   | "ui-grid"
   | "ui-text"
@@ -8,6 +13,8 @@ export type BlockType =
   | "ui-table"
   | "ui-circle"
   | "ui-square"
+  | "ui-header"
+  | "ui-screen"
   | "ui-interview"
   | "ui-parallelogram";
 
@@ -38,6 +45,26 @@ export interface Block extends JsonObject {
   groupId?: string;
   stackOrder: number;
   style?: Record<string, any>;
+}
+
+export interface ScreenBlock extends Block {
+  name: string;
+  blockType: "screen";
+  children: CanvasBlock[];
+}
+
+export interface ContainerBlock extends Block {
+  layout: string;
+  blockType: "container";
+  children: CanvasBlock[];
+}
+
+export interface ChildBlock extends Block {
+  containerId: string;
+}
+export interface HeaderBlock extends ChildBlock {
+  blockType: "header";
+  text: string;
 }
 
 export interface TextBlock extends Block {
@@ -89,10 +116,14 @@ export interface GroupBlock extends Block {
 export type CanvasBlock =
   | GridBlock
   | TextBlock
+  | ChildBlock
   | ImageBlock
   | TableBlock
   | GroupBlock
+  | HeaderBlock
+  | ScreenBlock
   | CircleBlock
   | SquareBlock
+  | ContainerBlock
   | InterviewBlock
   | ParallelogramBlock;

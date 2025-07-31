@@ -5,22 +5,32 @@ import {
   BlockType,
   TableBlock,
   ImageBlock,
+  TextBlock,
   CanvasBlock,
   CircleBlock,
   SquareBlock,
+  ScreenBlock,
   ColDefinition,
   InterviewBlock,
   ParallelogramBlock,
-  TextBlock,
+  ContainerBlock,
+  HeaderBlock,
 } from "@/types";
 
 export default function useBlock() {
-  const createBlock = (blockType: BlockType): CanvasBlock => {
+  const createBlock = (
+    blockType: BlockType,
+    containerId?: string,
+    style?: Record<string, any>
+  ): CanvasBlock => {
+    if (blockType === "ui-screen") return createScreen();
     if (blockType === "ui-text") return createTextBlock();
     if (blockType === "ui-circle") return createCircleBlock();
     if (blockType === "ui-square") return createSquareBlock();
     if (blockType === "ui-interview") return createInterviewBlock();
     if (blockType === "ui-parallelogram") return createParallelogramBlock();
+    if (blockType === "ui-header")
+      return createHeaderBlock(containerId!, style);
 
     throw new Error("Invalid block type");
   };
@@ -38,11 +48,84 @@ export default function useBlock() {
         return element as T;
       }
 
+      if ((element as ContainerBlock).children) {
+        foundElement = findBlock(
+          elementId,
+          (element as ContainerBlock).children
+        );
+      } else {
+        foundElement = findBlock(elementId, []);
+      }
+
       if (foundElement) {
         return foundElement;
       }
     }
   };
+
+  const findTopLevelBlock = <T extends CanvasBlock>(
+    elementId: string,
+    elements: CanvasBlock[]
+  ): CanvasBlock | null => {
+    console.log("elements:", elements);
+
+    function searchTopLevelBlock(
+      nodes: CanvasBlock[],
+      parent: CanvasBlock | null
+    ): CanvasBlock | null {
+      for (const node of nodes) {
+        if (node.id === elementId) {
+          // If parent is null, it's already top-most
+          return parent ?? node;
+        }
+
+        //@ts-ignore
+        if (node.children?.length) {
+          //@ts-ignore
+          const found = searchTopLevelBlock(node.children, parent ?? node);
+
+          if (found) return found;
+        }
+      }
+      return null;
+    }
+
+    return searchTopLevelBlock(elements, null);
+  };
+
+  function createScreen(): ScreenBlock {
+    return {
+      id: `screen-${uuidv4()}`,
+      name: "New Screen",
+      top: 0,
+      left: 0,
+      tags: [],
+      width: 375,
+      height: 812,
+      stackOrder: 0,
+      blockType: "screen",
+      children: [],
+    };
+  }
+
+  function createHeaderBlock(
+    containerId: string,
+    style?: Record<string, any>
+  ): HeaderBlock {
+    return {
+      style,
+      id: `block-${uuidv4()}`,
+      top: 0,
+      left: 0,
+      width: 0,
+      tags: [],
+      height: 0,
+      containerId,
+      stackOrder: 0,
+      text: "Header",
+      blockType: "header",
+    };
+  }
 
   function createTableBlock(colsDefinition: ColDefinition[]): TableBlock {
     return {
@@ -184,8 +267,10 @@ export default function useBlock() {
   return {
     findBlock,
     createBlock,
+    createScreen,
     createGridBLock,
     createTableBlock,
     createImageBlock,
+    findTopLevelBlock,
   };
 }

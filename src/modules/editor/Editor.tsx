@@ -10,6 +10,7 @@ import CreateGrid from "@/components/CreateGrid";
 import CreateTable from "@/components/CreateTable";
 import UploadImage from "@/components/UploadImage";
 import { useEffect } from "react";
+import LayoutSelector from "@/components/LayoutSelector";
 
 const Editor = () => {
   const {
@@ -67,6 +68,8 @@ const Editor = () => {
             onClose={() => setIsUploadImageOpen(false)}
           />
         )}
+
+        <LayoutSelector />
       </DndContext>
     </div>
   );

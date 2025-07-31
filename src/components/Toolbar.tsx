@@ -6,11 +6,15 @@ import {
   SquareIcon,
   CircleIcon,
   UserPenIcon,
+  LaptopIcon,
+  LayoutDashboardIcon,
+  HeadingIcon,
 } from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
 
 import TagCreator from "./TagCreator";
 import GroupingTools from "./GroupingTools";
+import { useCanvasStore } from "@/modules/state/CanvasStore";
 
 function ToolbarDraggable({
   id,
@@ -41,8 +45,44 @@ function ToolbarDraggable({
 }
 
 export default function Toolbar() {
+  const tool = useCanvasStore((state) => state.tool);
+
   return (
     <div className="absolute bottom-12 left-1/2 translate-x-[-50%] border gap-15 py-2 px-5 bg-white z-50 flex items-center">
+      {tool === "ui-builder" && <UIBuilderToolbar />}
+      {tool === "scope-builder" && <ScopeBuilderToolbar />}
+    </div>
+  );
+}
+
+const UIBuilderToolbar = () => {
+  return (
+    <>
+      <ToolbarDraggable id="ui-screen">
+        <div className="flex flex-col items-center">
+          <LaptopIcon />
+          <span>Screen</span>
+        </div>
+      </ToolbarDraggable>
+      <ToolbarDraggable id="ui-container">
+        <div className="flex flex-col items-center">
+          <LayoutDashboardIcon />
+          <span>Container</span>
+        </div>
+      </ToolbarDraggable>
+      <ToolbarDraggable id="ui-header">
+        <div className="flex flex-col items-center">
+          <HeadingIcon />
+          <span>Header</span>
+        </div>
+      </ToolbarDraggable>
+    </>
+  );
+};
+
+const ScopeBuilderToolbar = () => {
+  return (
+    <>
       <ToolbarDraggable id="ui-text">
         <div className="flex flex-col items-center">
           <TypeIcon />
@@ -93,6 +133,6 @@ export default function Toolbar() {
       </ToolbarDraggable>
       <TagCreator />
       <GroupingTools />
-    </div>
+    </>
   );
-}
+};

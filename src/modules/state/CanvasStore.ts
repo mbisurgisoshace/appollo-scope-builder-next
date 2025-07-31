@@ -6,7 +6,7 @@ import {
   cameraToScreenCoordinates,
 } from "../core/camera-utils";
 
-import { CanvasBlock } from "@/types";
+import { CanvasBlock, NewContainerSetup } from "@/types";
 import { CAMERA_ANGLE, RECT_H, RECT_W } from "../core/constants";
 
 export interface CanvasState {
@@ -253,11 +253,15 @@ interface CanvasContextType {
   selectedGroupId: string | null;
   scale: { x: number; y: number };
   selectedElement: CanvasBlock | null;
+  tool: "ui-builder" | "scope-builder";
   selectGroup: (groupId: string) => void;
   setFilterTags: (tags: string[]) => void;
   setSelectedIds: (ids: string[]) => void;
   selectElement: (element: CanvasBlock) => void;
+  newContainerSetup: NewContainerSetup | undefined;
   setScale: (scale: { x: number; y: number }) => void;
+  setTool: (tool: "ui-builder" | "scope-builder") => void;
+  setNewContainerSetup: (newContainerSetup?: NewContainerSetup) => void;
 }
 
 export const useCanvasStore = create<CanvasContextType>((set) => ({
@@ -265,8 +269,13 @@ export const useCanvasStore = create<CanvasContextType>((set) => ({
   selectedIds: [],
   scale: { x: 1, y: 1 },
   selectedElement: null,
+  tool: "scope-builder",
   selectedGroupId: null,
+  newContainerSetup: undefined,
+  setTool: (tool) => set({ tool }),
   setScale: (scale) => set({ scale }),
+  setNewContainerSetup: (newContainerSetup) =>
+    set({ newContainerSetup: newContainerSetup }),
   setFilterTags: (tags) => set({ filterTags: tags }),
   setSelectedIds: (ids) => set({ selectedIds: ids }),
   unselectElement: () => set({ selectedElement: null }),

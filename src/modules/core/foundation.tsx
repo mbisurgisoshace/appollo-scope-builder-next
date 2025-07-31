@@ -1,6 +1,6 @@
 import { Resizable } from "react-resizable";
-import { useDraggable } from "@dnd-kit/core";
-import { type PropsWithChildren } from "react";
+import { useDraggable, useDroppable } from "@dnd-kit/core";
+import { useMemo, type PropsWithChildren } from "react";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 
 import { inBounds } from "./math-utils";
@@ -466,6 +466,7 @@ export const DraggableBlock = ({
   id,
   top,
   left,
+  style,
   width,
   height,
   children,
@@ -488,7 +489,6 @@ export const DraggableBlock = ({
       {...attributes}
       className="absolute"
       style={{
-        //...style,
         zIndex: 100,
         top: `${top}px`,
         left: `${left}px`,
@@ -497,6 +497,7 @@ export const DraggableBlock = ({
               transform.y / scale.y
             }px, 0)`
           : undefined,
+        ...style,
       }}
       onPointerDown={(e) => {
         if (listeners && listeners.onPointerDown) {
@@ -520,5 +521,48 @@ export const DraggableBlock = ({
         />
       )}
     </div>
+  );
+};
+
+export const GridPlaceholder = ({
+  columns,
+  screenId,
+}: {
+  columns: string;
+  screenId: string;
+}) => {
+  const generateGridArray = useMemo(() => {
+    return Array(columns.split(" ").length)
+      .fill("Placeholder")
+      .map((_, index) => `${screenId}$${index + 1}`);
+  }, [screenId, columns]);
+
+  return (
+    <div
+      className="absolute grid gap-1 w-full h-full bg-transparent z-50"
+      style={{
+        gridTemplateRows: "auto",
+        gridTemplateColumns: columns,
+      }}
+    >
+      {generateGridArray.map((id) => (
+        <GridPlaceholderItem id={id} key={id} />
+      ))}
+    </div>
+  );
+};
+
+export const GridPlaceholderItem = ({ id }: { id: string }) => {
+  const { setNodeRef, isOver } = useDroppable({
+    id,
+  });
+
+  return (
+    <div
+      id={id}
+      ref={setNodeRef}
+      data-column-id={id}
+      className={`${isOver ? "bg-red-200" : ""}`}
+    />
   );
 };

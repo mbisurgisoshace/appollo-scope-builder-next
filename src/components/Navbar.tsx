@@ -1,12 +1,15 @@
-import { memo, useEffect, useState } from "react";
 import { UserButton } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
+import { CircleCheckIcon } from "lucide-react";
+import { memo, useEffect, useState } from "react";
 import { useMutation, useQuery } from "convex/react";
+
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
+
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { CircleCheckIcon } from "lucide-react";
+import ToolSwitcher from "./ToolSwitcher";
 
 export function Navbar() {
   const params = useParams<{ roomId: string }>();
@@ -51,7 +54,10 @@ export function Navbar() {
           </Button>
         </div>
       )}
-      <UserButton />
+      <div className="flex items-center gap-2">
+        <ToolSwitcher />
+        <UserButton />
+      </div>
     </div>
   );
 }
