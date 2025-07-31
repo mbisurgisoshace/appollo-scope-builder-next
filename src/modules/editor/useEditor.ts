@@ -387,6 +387,7 @@ export default function useEditor() {
       const items = storage.get("items") as LiveList<CanvasBlock>;
       const [containerId, columnNumber] = overId.split("$");
 
+      //@ts-ignore
       const block = findBlock<ChildBlock>(blockId, items.toArray());
       const newContainer = findBlock<ContainerBlock>(
         containerId,
@@ -406,6 +407,7 @@ export default function useEditor() {
         currentContainer.children = currentContainer.children.filter(
           (child) => child.id !== block.id
         );
+        //@ts-ignore
         newContainer.children.push(block);
         block.containerId = newContainer.id;
       }

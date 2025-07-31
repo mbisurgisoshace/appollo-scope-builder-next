@@ -116,7 +116,7 @@ export interface GroupBlock extends Block {
 export type CanvasBlock =
   | GridBlock
   | TextBlock
-  | ChildBlock
+  //| ChildBlock
   | ImageBlock
   | TableBlock
   | GroupBlock
