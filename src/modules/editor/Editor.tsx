@@ -2,7 +2,7 @@ import { DndContext } from "@dnd-kit/core";
 
 import useEditor from "./useEditor";
 import CanvasRoot from "./CanvasRoot";
-import CanvasStore from "../state/CanvasStore";
+import CanvasStore, { useCanvasStore } from "../state/CanvasStore";
 
 import Navbar from "@/components/Navbar";
 import Toolbar from "@/components/Toolbar";
@@ -11,8 +11,11 @@ import CreateTable from "@/components/CreateTable";
 import UploadImage from "@/components/UploadImage";
 import { useEffect } from "react";
 import LayoutSelector from "@/components/LayoutSelector";
+import LeftSidebar from "@/components/LeftSideBar";
 
 const Editor = () => {
+  const tool = useCanvasStore((state) => state.tool);
+
   const {
     setActive,
     isGridOpen,
@@ -68,8 +71,9 @@ const Editor = () => {
             onClose={() => setIsUploadImageOpen(false)}
           />
         )}
-
         <LayoutSelector />
+
+        {tool === "ui-builder" && <LeftSidebar />}
       </DndContext>
     </div>
   );
