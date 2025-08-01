@@ -9,6 +9,7 @@ import {
   LaptopIcon,
   LayoutDashboardIcon,
   HeadingIcon,
+  RectangleEllipsisIcon,
 } from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
 
@@ -74,6 +75,12 @@ const UIBuilderToolbar = () => {
         <div className="flex flex-col items-center">
           <HeadingIcon />
           <span>Header</span>
+        </div>
+      </ToolbarDraggable>
+      <ToolbarDraggable id="ui-button">
+        <div className="flex flex-col items-center">
+          <RectangleEllipsisIcon />
+          <span>Button</span>
         </div>
       </ToolbarDraggable>
     </>

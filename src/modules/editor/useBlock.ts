@@ -15,6 +15,7 @@ import {
   ParallelogramBlock,
   ContainerBlock,
   HeaderBlock,
+  ButtonBlock,
 } from "@/types";
 
 export default function useBlock() {
@@ -25,6 +26,8 @@ export default function useBlock() {
   ): CanvasBlock => {
     if (blockType === "ui-screen") return createScreen();
     if (blockType === "ui-text") return createTextBlock();
+    if (blockType === "ui-button")
+      return createButtonBlock(containerId!, style);
     if (blockType === "ui-circle") return createCircleBlock();
     if (blockType === "ui-square") return createSquareBlock();
     if (blockType === "ui-interview") return createInterviewBlock();
@@ -124,6 +127,25 @@ export default function useBlock() {
       stackOrder: 0,
       text: "Header",
       blockType: "header",
+    };
+  }
+
+  function createButtonBlock(
+    containerId: string,
+    style?: Record<string, any>
+  ): ButtonBlock {
+    return {
+      style,
+      id: `block-${uuidv4()}`,
+      top: 0,
+      left: 0,
+      tags: [],
+      width: 0,
+      height: 0,
+      containerId,
+      stackOrder: 0,
+      text: "Button",
+      blockType: "button",
     };
   }
 

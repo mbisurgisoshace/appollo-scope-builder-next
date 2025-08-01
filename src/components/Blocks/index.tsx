@@ -12,6 +12,7 @@ import Parallelogram from "./Parallelogram";
 
 import { CanvasBlock } from "@/types";
 import Container from "./Container";
+import Button from "./Button";
 
 export interface BlockProps {
   canvasBlock: CanvasBlock;
@@ -24,6 +25,10 @@ export default function Block({ canvasBlock }: BlockProps) {
 
   if (canvasBlock.blockType === "text") {
     return <Text canvasBlock={canvasBlock} />;
+  }
+
+  if (canvasBlock.blockType === "button") {
+    return <Button canvasBlock={canvasBlock} />;
   }
 
   if (canvasBlock.blockType === "header") {

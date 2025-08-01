@@ -14,6 +14,7 @@ export type BlockType =
   | "ui-circle"
   | "ui-square"
   | "ui-header"
+  | "ui-button"
   | "ui-screen"
   | "ui-interview"
   | "ui-parallelogram";
@@ -64,6 +65,11 @@ export interface ChildBlock extends Block {
 }
 export interface HeaderBlock extends ChildBlock {
   blockType: "header";
+  text: string;
+}
+
+export interface ButtonBlock extends ChildBlock {
+  blockType: "button";
   text: string;
 }
 
@@ -120,6 +126,7 @@ export type CanvasBlock =
   | ImageBlock
   | TableBlock
   | GroupBlock
+  | ButtonBlock
   | HeaderBlock
   | ScreenBlock
   | CircleBlock
