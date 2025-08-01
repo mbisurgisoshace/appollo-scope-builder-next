@@ -73,6 +73,7 @@ export default function HierarchyTree() {
           )
         )
       }
+      //@ts-ignore
       getItemTitle={(item) => item.label}
     >
       <Tree treeId="tree-1" rootItem="root" treeLabel="Tree Example" />
