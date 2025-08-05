@@ -16,6 +16,7 @@ import {
   ContainerBlock,
   HeaderBlock,
   ButtonBlock,
+  DropdownBlock,
 } from "@/types";
 
 export default function useBlock() {
@@ -34,6 +35,8 @@ export default function useBlock() {
     if (blockType === "ui-parallelogram") return createParallelogramBlock();
     if (blockType === "ui-header")
       return createHeaderBlock(containerId!, style);
+    if (blockType === "ui-dropdown")
+      return createDropdownBlock(containerId!, style);
 
     throw new Error("Invalid block type");
   };
@@ -140,12 +143,30 @@ export default function useBlock() {
       top: 0,
       left: 0,
       tags: [],
-      width: 0,
-      height: 0,
+      width: 70,
+      height: 32,
       containerId,
       stackOrder: 0,
       text: "Button",
       blockType: "button",
+    };
+  }
+
+  function createDropdownBlock(
+    containerId: string,
+    style?: Record<string, any>
+  ): DropdownBlock {
+    return {
+      style,
+      id: `block-${uuidv4()}`,
+      top: 0,
+      left: 0,
+      tags: [],
+      height: 32,
+      width: 150,
+      containerId,
+      stackOrder: 0,
+      blockType: "dropdown",
     };
   }
 

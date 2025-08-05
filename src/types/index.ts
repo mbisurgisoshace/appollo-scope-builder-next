@@ -16,6 +16,7 @@ export type BlockType =
   | "ui-header"
   | "ui-button"
   | "ui-screen"
+  | "ui-dropdown"
   | "ui-interview"
   | "ui-parallelogram";
 
@@ -71,6 +72,10 @@ export interface HeaderBlock extends ChildBlock {
 export interface ButtonBlock extends ChildBlock {
   blockType: "button";
   text: string;
+}
+
+export interface DropdownBlock extends ChildBlock {
+  blockType: "dropdown";
 }
 
 export interface TextBlock extends Block {
@@ -131,6 +136,7 @@ export type CanvasBlock =
   | ScreenBlock
   | CircleBlock
   | SquareBlock
+  | DropdownBlock
   | ContainerBlock
   | InterviewBlock
   | ParallelogramBlock;

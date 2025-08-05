@@ -9,20 +9,9 @@ export interface ButtonProps {
 export default function Button({ canvasBlock }: ButtonProps) {
   const ref = useRef<HTMLButtonElement>(null);
 
-  const getDimensions = (): { width: number; height: number } => {
-    const { width, height, style } = canvasBlock;
+  const { width, height, style } = canvasBlock;
 
-    if (ref.current) {
-      return {
-        width: Math.max(ref.current.offsetWidth, width),
-        height: Math.max(ref.current.offsetHeight, height),
-      };
-    }
-
-    return { width, height };
-  };
-
-  const { width, height } = getDimensions();
+  console.log("style:", style);
 
   return (
     <DraggableBlock
@@ -41,12 +30,13 @@ export default function Button({ canvasBlock }: ButtonProps) {
         style={{
           width,
           height,
-          minWidth: "min-content",
-          minHeight: "min-content",
+          ...style,
+          //minWidth: "min-content",
+          //minHeight: "min-content",
           // width: canvasBlock.width,
           // height: canvasBlock.height,
         }}
-        className="bg-blue-500 text-white rounded-lg px-2 py-1 shadow hover:bg-blue-600 transition"
+        className="rounded-lg px-2 py-1 shadow transition"
       >
         {canvasBlock.text}
       </button>

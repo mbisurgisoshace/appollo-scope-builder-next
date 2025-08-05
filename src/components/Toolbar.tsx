@@ -10,6 +10,7 @@ import {
   LayoutDashboardIcon,
   HeadingIcon,
   RectangleEllipsisIcon,
+  RectangleHorizontalIcon,
 } from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
 
@@ -81,6 +82,12 @@ const UIBuilderToolbar = () => {
         <div className="flex flex-col items-center">
           <RectangleEllipsisIcon />
           <span>Button</span>
+        </div>
+      </ToolbarDraggable>
+      <ToolbarDraggable id="ui-dropdown">
+        <div className="flex flex-col items-center">
+          <RectangleHorizontalIcon />
+          <span>Dropdown</span>
         </div>
       </ToolbarDraggable>
     </>

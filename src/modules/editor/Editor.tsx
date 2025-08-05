@@ -12,6 +12,7 @@ import UploadImage from "@/components/UploadImage";
 import { useEffect } from "react";
 import LayoutSelector from "@/components/LayoutSelector";
 import LeftSidebar from "@/components/LeftSideBar";
+import RightSidebar from "@/components/RightSidebar";
 
 const Editor = () => {
   const tool = useCanvasStore((state) => state.tool);
@@ -74,6 +75,7 @@ const Editor = () => {
         <LayoutSelector />
 
         {tool === "ui-builder" && <LeftSidebar />}
+        {tool === "ui-builder" && <RightSidebar />}
       </DndContext>
     </div>
   );

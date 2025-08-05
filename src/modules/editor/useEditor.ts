@@ -327,6 +327,43 @@ export default function useEditor() {
     []
   );
 
+  const editStyle = useMutation(
+    ({ storage }, blockId: string, styleProp: string, styleValue: string) => {
+      const items = storage.get("items") as LiveList<CanvasBlock>;
+
+      const block = findBlock(blockId, items.toArray());
+
+      if (block) {
+        if (styleProp === "width" || styleProp === "height") {
+          const value = parseInt(styleValue, 10);
+          block[styleProp as "width" | "height"] = isNaN(value) ? 0 : value;
+        } else if (["fontSize", "weight"].includes(styleProp)) {
+          const value = parseInt(styleValue, 10);
+          block.style = {
+            ...block.style,
+            [styleProp as string]: isNaN(value) ? 14 : value,
+          };
+        } else {
+          block.style = {
+            ...block.style,
+            [styleProp as string]: styleValue,
+          };
+        }
+
+        const topLevelBlock = findTopLevelBlock(block.id, items.toArray());
+
+        if (!topLevelBlock) return;
+
+        const topLevelBlockIndex = items.findIndex(
+          (item) => item.id === topLevelBlock.id
+        );
+
+        items.set(topLevelBlockIndex, topLevelBlock);
+      }
+    },
+    []
+  );
+
   const addContainerBlock = useMutation(
     ({ storage }, blockId: string) => {
       if (!newContainerSetup) return;
@@ -457,6 +494,7 @@ export default function useEditor() {
     active,
     arrows,
     tagBlock,
+    editStyle,
     setActive,
     isGridOpen,
     sendToBack,

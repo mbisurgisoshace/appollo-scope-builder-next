@@ -13,6 +13,7 @@ import Parallelogram from "./Parallelogram";
 import { CanvasBlock } from "@/types";
 import Container from "./Container";
 import Button from "./Button";
+import Dropdown from "./Dropdown";
 
 export interface BlockProps {
   canvasBlock: CanvasBlock;
@@ -61,6 +62,10 @@ export default function Block({ canvasBlock }: BlockProps) {
 
   if (canvasBlock.blockType === "interview") {
     return <Interview canvasBlock={canvasBlock} />;
+  }
+
+  if (canvasBlock.blockType === "dropdown") {
+    return <Dropdown canvasBlock={canvasBlock} />;
   }
 
   if (canvasBlock.blockType === "container") {
